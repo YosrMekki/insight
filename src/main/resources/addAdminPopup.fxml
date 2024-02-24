@@ -1,0 +1,44 @@
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controles.AddAdminPopup"
+      prefWidth="400" prefHeight="500"
+      style="-fx-background-color: #1554b3; -fx-text-fill: white; -fx-padding: 20;"
+      spacing="10">
+
+    <Label text="Add Admin" style="-fx-font-size: 18px; " />
+
+    <Label text="Entrez l'email" />
+    <TextField fx:id="emailTextfield" prefWidth="250" />
+
+    <Label text="Entrez le mot de passe" />
+    <PasswordField fx:id="passwordTextfield" prefWidth="250" />
+
+    <Label text="Entrez le prénom" />
+    <TextField fx:id="firstNameTextfield" prefWidth="250" />
+
+    <Label text="Entrez le nom" />
+    <TextField fx:id="lastNameTextfield" prefWidth="250" />
+
+
+
+    <Label text="Entrez la date de naissance" />
+    <DatePicker fx:id="date" prefWidth="250" />
+
+    <Label text="Entrez le numéro de téléphone" />
+    <TextField fx:id="phoneNumberTextfield" prefWidth="250" />
+
+    <Label text="Entrez le numéro cin" />
+    <TextField fx:id="cinTextfield" prefWidth="250" />
+
+
+
+
+
+    <Button text="Ajoute admin" onAction="#addAdmin" />
+</VBox>
