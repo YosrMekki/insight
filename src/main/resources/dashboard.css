@@ -1,0 +1,36 @@
+.menu-button {
+    -fx-background-color: #1554b3;
+    -fx-text-fill: white;
+    -fx-font-size: 16px; /* Adjust font size */
+    -fx-padding: 8px 16px; /* Adjust padding */
+    -fx-border-radius: 5px;
+}
+
+.menu-button:hover {
+    -fx-background-color: #0e3a8b;
+}
+#addAdminButton {
+    -fx-background-color: #1554b3;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+#addAdminButton:hover {
+    -fx-background-color: #0e3a8b;
+}
+#addProfessorButton {
+    -fx-background-color: #1554b3;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+#addProfessorButton:hover {
+    -fx-background-color: #0e3a8b;
+}
+#welcomeLabel{
+    -fx-text-fill: #ffff;
+}

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ResourceBundle;
 
 import entities.Student;
@@ -51,19 +54,72 @@ public class Signup {
 
     @FXML
     void ajouterEtudiant(ActionEvent event) {
-        Student student = new Student(emailTextfield.getText(),passwordTextfield.getText(),prenomTextfield.getText(),nomTextfield.getText(), Date.valueOf(date.getValue()),Integer.parseInt(numTelTextfield.getText()),Integer.parseInt(numCinTextfield.getText()));
+        // Retrieve input values
+        String email = emailTextfield.getText();
+        String password = passwordTextfield.getText();
+        String firstName = prenomTextfield.getText();
+        String lastName = nomTextfield.getText();
+        Date birthDate = Date.valueOf(date.getValue());
+        String phoneNumberString = numTelTextfield.getText(); // Get phone number as string
+        String cinString = numCinTextfield.getText(); // Get cin as string
+
+        // Check if phone number is numeric and has length of 8
+        if (!isValidPhoneNumber(phoneNumberString)) {
+            showAlert(Alert.AlertType.ERROR, "Numéro de téléphone invalide", "Veuillez entrer un numéro de téléphone valide.");
+            return;
+        }
+        int phoneNumber = Integer.parseInt(phoneNumberString); // Convert to int after validation
+
+        // Check if cin is numeric
+        if (!isValidPhoneNumber(cinString)) {
+            showAlert(Alert.AlertType.ERROR, "CIN invalide", "Veuillez entrer un CIN valide.");
+            return;
+        }
+        int cin = Integer.parseInt(cinString); // Convert to int after validation
+
+        // email valide check
+        if (!isValidEmail(email)) {
+            showAlert(Alert.AlertType.ERROR, "Email invalide", "Veuillez entrer une adresse mail valide.");
+            return;
+        }
+
+        // mot de passe valide check
+        if (!isValidPassword(password)) {
+            showAlert(Alert.AlertType.ERROR, "Mot de passe invalide", "La longueur du mot de passe doit être d’au moins 8 lettres et contenir au moins un chiffre, une lettre majuscule et une lettre minuscule.");
+            return;
+        }
+
+        // date de naissance check
+        if (!isValidBirthDate(birthDate)) {
+            showAlert(Alert.AlertType.ERROR, "Date de naissance invalide", "Veuillez entrer une date de naissance valide.");
+            return;
+        }
+
+        // Check if email is unique
         StudentService studentService = new StudentService();
         try {
+            if (!studentService.isEmailUnique(email)) {
+                showAlert(Alert.AlertType.ERROR, "Email dupliquée", "Cette adresse mail existe déjà.");
+                return;
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while checking email uniqueness.");
+            e.printStackTrace();
+            return;
+        }
+
+        // Create Student object
+        Student student = new Student(email, password, firstName, lastName, birthDate, phoneNumber, cin);
+
+        // Add student to database
+        try {
             studentService.add(student);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("etudiant ajouté");
-            alert.show();
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Étudiant ajouté avec succès.");
             // Navigate back to the signin interface
             goToSignin(event);
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(e.getMessage());
-            alert.show();
+            showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while adding student to database.");
+            e.printStackTrace();
         }
     }
 
@@ -95,6 +151,56 @@ public class Signup {
         assert passwordTextfield != null : "fx:id=\"passwordTextfield\" was not injected: check your FXML file 'signup.fxml'.";
         assert prenomTextfield != null : "fx:id=\"prenomTextfield\" was not injected: check your FXML file 'signup.fxml'.";
 
+    }
+    private boolean isValidEmail(String email) {
+        // Regular expression for basic email validation
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
+
+    // Method to check if email is unique
+
+
+    private boolean isValidPassword(String password) {
+        // Password must be at least 8 characters long and contain at least one digit, one uppercase letter, and one lowercase letter
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+        return password.matches(passwordRegex);
+    }
+
+    // Method to validate birth date
+    private boolean isValidBirthDate(Date birthDate) {
+        // Define acceptable range of birth dates (e.g., from 1900 to current year)
+        LocalDate minDate = LocalDate.of(1900, 1, 1);
+        LocalDate maxDate = LocalDate.now();
+
+        // Convert java.sql.Date to LocalDate
+        LocalDate date = birthDate.toLocalDate();
+
+        // Check if birth date is within the acceptable range
+        return !(date.isBefore(minDate) || date.isAfter(maxDate));
+    }
+
+    //check phone number
+    private boolean isValidPhoneNumber(String phoneNumberString) {
+        // Check if the phone number string is not null and has a length of 8
+        if (phoneNumberString != null && phoneNumberString.length() == 8) {
+            // Check if the phone number string contains only numeric digits
+            for (int i = 0; i < phoneNumberString.length(); i++) {
+                if (!Character.isDigit(phoneNumberString.charAt(i))) {
+                    return false; // Return false if a non-digit character is found
+                }
+            }
+            return true; // Return true if all characters are digits and length is 8
+        }
+        return false; // Return false if length is not 8 or phone number is null
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 }

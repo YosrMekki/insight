@@ -98,8 +98,9 @@ public class Dashboard {
 
 
     public void initData(String firstName, String lastName) {
-        firstNameLabel.setText("First Name: " + firstName);
-        lastNameLabel.setText("Last Name: " + lastName);
+        firstNameLabel.setText(  firstName+" ");
+        lastNameLabel.setText(lastName);
+        System.out.println(firstName+ lastName);
     }
 
     @FXML
@@ -234,8 +235,8 @@ public class Dashboard {
         }
     }
 
-
-    public void showDataTable(javafx.scene.input.MouseEvent mouseEvent) {
+    @FXML
+    public void showDataTable() {
         studentTable.setVisible(true);
     }
 

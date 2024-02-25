@@ -10,37 +10,57 @@
 
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import java.net.URL?>
+<?import javafx.scene.layout.HBox?>
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.Dashboard" style="-fx-background-color: #1554b3;">
+    <stylesheets>
+        <URL value="@dashboard.css" />
+    </stylesheets>
     <children>
+
+        <Rectangle width="200.0" height="600" fill="WHITE"/>
         <!-- Welcome message with admin's name -->
-        <VBox spacing="10" layoutX="30.0" layoutY="30.0">
-            <Label fx:id="welcomeLabel" textFill="WHITE" style="-fx-font-size: 24px;"/>
-            <Label fx:id="firstNameLabel" textFill="WHITE" style="-fx-font-size: 18px;"/>
-            <Label fx:id="lastNameLabel" textFill="WHITE" style="-fx-font-size: 18px;"/>
-        </VBox>
+        <HBox layoutX="200.0" layoutY="30.0" spacing="10">
+            <Label fx:id="welcomeLabel" textFill="WHITE" style="-fx-font-size: 24px;" text="Bienvenue"/>
+            <Label fx:id="firstNameLabel" textFill="WHITE" style="-fx-font-size: 24px;"/>
+            <Label fx:id="lastNameLabel" textFill="WHITE" style="-fx-font-size: 24px;"/>
+        </HBox>
 
-        <VBox spacing="10" layoutX="30.0" layoutY="100.0">
+        <ImageView fitHeight="150.0" fitWidth="184.0" layoutX="10.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@/logo.png" />
+            </image>
+        </ImageView>
+
+
+
+        <VBox spacing="20" layoutX="30.0" layoutY="100.0">
             <Label text="Menu" textFill="WHITE" style="-fx-font-size: 20px;"/>
-            <Label fx:id="studentsLabel" text="Students" textFill="WHITE" style="-fx-font-size: 16px;" onMouseClicked="#showDataTable"/>
-            <Label text="Professors" textFill="WHITE" style="-fx-font-size: 16px;" />
+            <Button fx:id="studentsButton" text="Etudiants" styleClass="menu-button" onAction="#showDataTable"/>
+            <Button fx:id="professorsButton" text="Professeurs" styleClass="menu-button"/>
         </VBox>
 
-        <Button text="Add Admin" layoutX="700.0" layoutY="30.0" onAction="#addAdmin"/>
+
+
+        <Button fx:id="addAdminButton" text="Ajouter admin" layoutX="800.0" layoutY="30.0" onAction="#addAdmin"/>
+        <Button fx:id="addProfessorButton" text="Ajouter professeur" layoutX="600.0" layoutY="30.0" />
 
         <!-- Data table for displaying students -->
-        <TableView fx:id="studentTable" layoutX="200.0" layoutY="100.0" prefHeight="500.0" prefWidth="800.0" visible="false">
-            <columns>
+        <TableView fx:id="studentTable" layoutX="250.0" layoutY="120.0" prefHeight="450.0" prefWidth="790.0" visible="false">            <columns>
                 <TableColumn fx:id="idColumn" text="ID" prefWidth="75">
                     <cellValueFactory>
                         <PropertyValueFactory property="id"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="firstNameColumn" text="First Name" prefWidth="150">
+                <TableColumn fx:id="firstNameColumn" text="Prenom" prefWidth="150">
                     <cellValueFactory>
                         <PropertyValueFactory property="firstName"/>
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="lastNameColumn" text="Last Name" prefWidth="150">
+                <TableColumn fx:id="lastNameColumn" text="Nom" prefWidth="150">
                     <cellValueFactory>
                         <PropertyValueFactory property="lastName"/>
                     </cellValueFactory>

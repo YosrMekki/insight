@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import services.AdminService;
 import services.StudentService;
 
 public class Signin {
@@ -40,15 +41,20 @@ public class Signin {
     void signin(ActionEvent event) {
         String email = emailTextfield.getText();
         String password = passwordTextfield.getText();
-
+        AdminService adminService = new AdminService();
         StudentService studentService = new StudentService();
+
         try {
             User user = studentService.signIn(email, password);
             if (user != null && user instanceof Admin) {
                 // Admin user signed in, allow access to dashboard
                 // Load the dashboard interface
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+
+
                 Parent root = loader.load();
+                Dashboard controller=loader.getController();
+                controller.initData(adminService.getAdminByEmail(email).getFirstName(),adminService.getAdminByEmail(email).getLastName());
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(scene);

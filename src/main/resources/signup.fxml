@@ -70,7 +70,7 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="378.0" stroke="BLACK" strokeType="INSIDE" width="230.0" />
                   <ImageView fitHeight="130.0" fitWidth="164.0" layoutX="33.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../img/logo.png" />
+                        <Image url="@/logo.png" />
                      </image>
                   </ImageView>
                   <Label alignment="CENTER" layoutX="367.0" layoutY="14.0" text="SIGN UP" textAlignment="CENTER" textFill="WHITE">
