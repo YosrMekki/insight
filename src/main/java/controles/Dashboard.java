@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import entities.Professor;
 import entities.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import services.AdminService;
+import services.ProfessorService;
 import services.StudentService;
 
 public class Dashboard {
@@ -67,34 +70,91 @@ public class Dashboard {
     @FXML
     private TableColumn<Student, Void> actionsColumn;
     @FXML
+    private Label professorfirstNameLabel;
+
+    @FXML
+    private Label professorlastNameLabel;
+
+    @FXML
+    private TableView<Professor> professorTable;
+
+    @FXML
+    private TableColumn<Professor, Integer> idprofessorColumn;
+
+    @FXML
+    private TableColumn<Professor, String> professorfirstNameColumn;
+
+    @FXML
+    private TableColumn<Professor, String> professorlastNameColumn;
+
+
+    @FXML
+    private TableColumn<Professor, Integer> professorcinColumn;
+
+    @FXML
+    private TableColumn<Professor, Integer> professorphoneNumberColumn;
+
+    @FXML
+    private TableColumn<Professor, Date> professorbirthDateColumn;
+    @FXML
+    private TableColumn<Professor, String> professoremailColumn;
+
+
+    @FXML
+    private TableColumn<Professor, Void> professoractionsColumn;
+    @FXML
     private Button studentsButton;
+    @FXML
+    private Button professorsButton;
+
 
     private final StudentService studentService = new StudentService();
     AdminService   adminService = new AdminService();
+    ProfessorService professorService = new ProfessorService() ;
+
 
 
 
 
     @FXML
     void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        cinColumn.setCellValueFactory(new PropertyValueFactory<>("cin"));
-        birthDateColumn.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-
-        // Initialize actions column
-        initializeActionsColumn();
-
         try {
+            // Initialize cell value factories for students
+            idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+            firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+            phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+            cinColumn.setCellValueFactory(new PropertyValueFactory<>("cin"));
+            birthDateColumn.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+            emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+
+            // Initialize cell value factories for professors
+            idprofessorColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+            professorfirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            professorlastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+            professorphoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+            professorcinColumn.setCellValueFactory(new PropertyValueFactory<>("cin"));
+            professorbirthDateColumn.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+            professoremailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+
+            // Initialize actions column for students
+            initializeActionsColumn();
+
+            // Initialize actions column for professors
+            initializeProfessorActionsColumn();
+
+            // Display students
             displayStudents();
+
+            // Display professors
+            displayProfessors();
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle the exception
+            // Log or handle the exception
         }
     }
+
+
 
 
     public void initData(String firstName, String lastName) {
@@ -103,21 +163,16 @@ public class Dashboard {
         System.out.println(firstName+ lastName);
     }
 
-    @FXML
-    private void showStudents() {
-        try {
-            List<Student> studentList = studentService.Display();
-            ObservableList<Student> students = FXCollections.observableArrayList(studentList);
-            studentTable.setItems(students);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Handle the exception
-        }
-    }
+
+
 
     private void displayStudents() throws SQLException {
         ObservableList<Student> students = FXCollections.observableArrayList(studentService.Display());
         studentTable.setItems(students);
+    }
+    private void displayProfessors() throws SQLException {
+        ObservableList<Professor> professors = FXCollections.observableArrayList(professorService.Display());
+        professorTable.setItems(professors);
     }
 
     private void initializeActionsColumn() {
@@ -138,6 +193,7 @@ public class Dashboard {
                 });
             }
 
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -150,8 +206,36 @@ public class Dashboard {
         });
     }
 
+    private void initializeProfessorActionsColumn() {
+        professoractionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
+            private final HBox container = new HBox(editButton, deleteButton);
+
+            {
+                editButton.setOnAction(event -> {
+                    // Handle edit action
+                    handleProfessorEditButton();
+                });
+
+                deleteButton.setOnAction(event -> {
+                    // Handle delete action
+                    handleProfessorDeleteButton();
+                });
+            }
 
 
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(container);
+                }
+            }
+        });
+    }
 
     @FXML
     private void handleEditButton() {
@@ -192,6 +276,86 @@ public class Dashboard {
         } else {
             // No student selected, display an error message or handle accordingly
             System.out.println("No student selected for editing.");
+        }
+    }
+
+    @FXML
+    private void handleProfessorEditButton() {
+        // Get the selected student from the table
+        Professor selectedProfessor = professorTable.getSelectionModel().getSelectedItem();
+
+        if (selectedProfessor != null) {
+            // Create an instance of the EditStudentPopup dialog
+            EditProfessorPopup editStudentPopup = new EditProfessorPopup(selectedProfessor);
+
+            // Show the dialog and wait for the user response
+            Optional<Pair<Professor, String>> result = editStudentPopup.showAndWait();
+
+            // If the user clicked the Save button, update the student information
+            result.ifPresent(pair -> {
+                Professor updatedProfessor = pair.getKey();
+                String newEmail = pair.getValue();
+
+                // Update the selected student with the new information
+                selectedProfessor.setEmail(newEmail);
+                selectedProfessor.setFirstName(selectedProfessor.getFirstName());
+                selectedProfessor.setLastName(selectedProfessor.getLastName());
+                selectedProfessor.setBirthDate(selectedProfessor.getBirthDate());
+                selectedProfessor.setCin(selectedProfessor.getCin());
+                selectedProfessor.setPhoneNumber(selectedProfessor.getPhoneNumber());
+
+                try {
+                    // Update the changes in the database using the StudentService
+                    professorService.update(selectedProfessor);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    // Handle the exception
+                }
+
+                // Refresh the TableView to reflect the changes
+                studentTable.refresh();
+            });
+        } else {
+            // No student selected, display an error message or handle accordingly
+            System.out.println("No professor selected for editing.");
+        }
+    }
+    @FXML
+    private void handleProfessorDeleteButton() {
+        // Get the selected professor from the table
+        Professor selectedProfessor = professorTable.getSelectionModel().getSelectedItem();
+
+        if (selectedProfessor != null) {
+            // Create a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Deletion");
+            alert.setHeaderText("Delete Student");
+            alert.setContentText("Are you sure you want to delete " + selectedProfessor.getFirstName() + " " + selectedProfessor.getLastName() + "?");
+
+            // Add OK and Cancel buttons to the dialog
+            ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(okButton, cancelButton);
+
+            // Show the confirmation dialog and wait for user response
+            Optional<ButtonType> result = alert.showAndWait();
+
+            // If the user confirms deletion, proceed with deletion
+            if (result.isPresent() && result.get() == okButton) {
+                try {
+                    // Delete the selected student from the database using the StudentService
+                    professorService.delete(selectedProfessor);
+
+                    // Remove the selected student from the TableView
+                    professorTable.getItems().remove(selectedProfessor);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    // Handle the exception
+                }
+            }
+        } else {
+            // No student selected, display an error message or handle accordingly
+            System.out.println("No professor selected for deletion.");
         }
     }
 
@@ -237,9 +401,12 @@ public class Dashboard {
 
     @FXML
     public void showDataTable() {
+        professorTable.setVisible(false);
         studentTable.setVisible(true);
     }
-
+    public void showProfessorDataTable(ActionEvent actionEvent) {
+        studentTable.setVisible(false);
+        professorTable.setVisible(true);}
 
     public void addAdmin(ActionEvent actionEvent) {
 
@@ -258,4 +425,31 @@ public class Dashboard {
             // Handle the exception
         }
     }
+
+    public void addProfessor(ActionEvent actionEvent) {
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/addProfessorPopup.fxml"));
+            Parent root = fxmlLoader.load();
+            AddProfessorPopup controller = fxmlLoader.getController();
+            controller.initProfessorService(professorService); // Pass the Prof Service to the controller
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
+

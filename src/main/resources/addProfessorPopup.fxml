@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controles.AddProfessorPopup"
+      prefWidth="400" prefHeight="500"
+      style="-fx-background-color: #1554b3; -fx-text-fill: white; -fx-padding: 20;"
+      spacing="10">
+
+    <Label text="Add professor" style="-fx-font-size: 18px; " />
+
+    <Label text="Entrez l'email" />
+    <TextField fx:id="emailTextfield" prefWidth="250" />
+
+    <Label text="Entrez le mot de passe" />
+    <PasswordField fx:id="passwordTextfield" prefWidth="250" />
+
+    <Label text="Entrez le prénom" />
+    <TextField fx:id="firstNameTextfield" prefWidth="250" />
+
+    <Label text="Entrez le nom" />
+    <TextField fx:id="lastNameTextfield" prefWidth="250" />
+
+
+
+    <Label text="Entrez la date de naissance" />
+    <DatePicker fx:id="date" prefWidth="250" />
+
+    <Label text="Entrez le numéro de téléphone" />
+    <TextField fx:id="phoneNumberTextfield" prefWidth="250" />
+
+    <Label text="Entrez le numéro cin" />
+    <TextField fx:id="cinTextfield" prefWidth="250" />
+
+
+
+
+
+    <Button text="Ajoutee prof" onAction="#addProfessor" />
+</VBox>
+

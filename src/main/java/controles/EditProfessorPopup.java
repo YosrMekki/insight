@@ -1,16 +1,18 @@
 package controles;
 
+import entities.Professor;
 import entities.Student;
-import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
+import services.ProfessorService;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 
-public class EditStudentPopup extends Dialog<Pair<Student, String>> {
+public class EditProfessorPopup extends Dialog<Pair<Professor, String>> {
 
     private TextField firstNameField;
     private TextField lastNameField;
@@ -19,8 +21,9 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
     private TextField phoneNumberField;
     private TextField emailField;
 
-    public EditStudentPopup(Student initialStudent) {
-        setTitle("Edit Student");
+    ProfessorService professorService = new ProfessorService() ;
+    public EditProfessorPopup(Professor initialProfessor) {
+        setTitle("Edit Professor");
 
         // Set the button types (Save and Cancel)
         getDialogPane().getButtonTypes().addAll(ButtonType.APPLY, ButtonType.CANCEL);
@@ -31,7 +34,7 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
         grid.setVgap(10);
 
         // Extract year, month, and day from initialStudent's birth date
-        Date initialBirthDate = (Date) initialStudent.getBirthDate();
+        Date initialBirthDate = (Date) initialProfessor.getBirthDate();
         java.util.Date initialUtilDate = new java.util.Date(initialBirthDate.getTime());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(initialUtilDate);
@@ -42,13 +45,13 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
         // Create LocalDate object
         LocalDate localDate = LocalDate.of(year, month, day);
 
-        // Add text fields for editing student information
-        firstNameField = new TextField(initialStudent.getFirstName());
-        lastNameField = new TextField(initialStudent.getLastName());
+        // Add text fields for editing Professor information
+        firstNameField = new TextField(initialProfessor.getFirstName());
+        lastNameField = new TextField(initialProfessor.getLastName());
         birthDateField = new DatePicker(localDate);
-        cinField = new TextField(String.valueOf(initialStudent.getCin()));
-        phoneNumberField = new TextField(String.valueOf(initialStudent.getPhoneNumber()));
-        emailField = new TextField(initialStudent.getEmail());
+        cinField = new TextField(String.valueOf(initialProfessor.getCin()));
+        phoneNumberField = new TextField(String.valueOf(initialProfessor.getPhoneNumber()));
+        emailField = new TextField(initialProfessor.getEmail());
 
         // Add labels and text fields to the grid
         grid.add(new Label("Prénom:"), 0, 0);
@@ -83,6 +86,13 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
                     showAlert(Alert.AlertType.ERROR, "Email invalide", "Veuillez entrer une adresse mail valide.");
                     return null;
                 }
+                try {
+                    if (!professorService.isEmailUnique(email)){
+                        showAlert(Alert.AlertType.ERROR,"Email dupliquée", "Cette adresse mail existe déjà.\"");
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
                 // Validate password (not applicable in this context)
 
@@ -101,7 +111,7 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
                 // Validate CIN (not implemented yet)
 
                 // Create updated student object
-                Student updatedStudent = new Student(
+                Professor updatedProfessor = new Professor(
                         email,
                         null, // Password not provided here
                         firstName,
@@ -112,7 +122,7 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
                 );
 
                 // Return the updated student and email pair
-                return new Pair<>(updatedStudent, email);
+                return new Pair<>(updatedProfessor, email);
             }
             return null;
         });
@@ -169,6 +179,4 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
-
 }

@@ -1,22 +1,24 @@
 package controles;
 
+import entities.Admin;
+import entities.Professor;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import services.AdminService;
+import services.ProfessorService;
+
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import entities.Admin;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import services.AdminService;
-
-public class AddAdminPopup {
-
+public class AddProfessorPopup {
     @FXML
     private ResourceBundle resources;
 
@@ -43,13 +45,14 @@ public class AddAdminPopup {
 
     @FXML
     private TextField firstNameTextfield;
-    AdminService adminService = new AdminService();
-    public void initAdminService(AdminService adminService) {
-        this.adminService = adminService;
+    ProfessorService professorService = new ProfessorService();
+    public void initProfessorService(ProfessorService service) {
+        this.professorService = professorService;
     }
 
     @FXML
-    void addAdmin(ActionEvent event) {
+
+    void addProfessor(ActionEvent event) {
         String email = emailTextfield.getText();
         String password = passwordTextfield.getText();
         String firstName = firstNameTextfield.getText();
@@ -63,18 +66,13 @@ public class AddAdminPopup {
             showAlert(Alert.AlertType.ERROR, "Email invalide", "Veuillez entrer une adresse mail valide.");
             return;
         }
-        // Check if email is unique
         try {
-            if (!adminService.isEmailUnique(email)) {
-                showAlert(Alert.AlertType.ERROR, "Email dupliquée", "Cette adresse mail existe déjà.");
-                return;
+            if (!professorService.isEmailUnique(email)){
+                showAlert(Alert.AlertType.ERROR,"Email dupliquée", "Cette adresse mail existe déjà.");
             }
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while checking email uniqueness.");
-            e.printStackTrace();
-            return;
+            throw new RuntimeException(e);
         }
-
 
         // Validate password
         if (!isValidPassword(password)) {
@@ -90,13 +88,13 @@ public class AddAdminPopup {
 
         // Validate phone number
         if (!isValidPhoneNumber(phoneNumberString)) {
-            showAlert(Alert.AlertType.ERROR, "Invalid Phone Number", "Please enter a valid phone number with 8 digits.");
+            showAlert(Alert.AlertType.ERROR, "Numéro de téléphone invalide", "Veuillez entrer un numéro de téléphone valide.");
             return;
         }
 
         // Validate cin
         if (!isValidPhoneNumber(cinString)) {
-            showAlert(Alert.AlertType.ERROR, "CIN invalide", "Veuillez entrer un CIN valide.");
+            showAlert(Alert.AlertType.ERROR, "CIN invalide ", "Veuillez entrer un CIN valide.");
             return;
         }
 
@@ -104,17 +102,19 @@ public class AddAdminPopup {
         int phoneNumber = Integer.parseInt(phoneNumberString);
         int cin = Integer.parseInt(cinString);
 
-        // Create Admin object
-        Admin admin = new Admin(email, password, firstName, lastName, java.sql.Date.valueOf(birthDate), phoneNumber, cin);
+        // Create Professor object
+        Professor professor = new Professor(email, password, firstName, lastName, java.sql.Date.valueOf(birthDate), phoneNumber, cin);
 
         try {
-            adminService.add(admin);
-            // Optionally, you can close the popup here
+            professorService.add(professor);
+            // close the popup
+            ((Node) event.getSource()).getScene().getWindow().hide();
         } catch (SQLException e) {
             e.printStackTrace();
             // Handle the exception
         }
     }
+
 
 
 
@@ -169,13 +169,5 @@ public class AddAdminPopup {
         alert.showAndWait();
     }
 
-
-
-
-    @FXML
-    void initialize() {
-
-
-    }
 
 }
