@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="890.0" prefWidth="1350.0" styleClass="gradient-background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Adminrec">
+   <top>
+      <HBox prefHeight="61.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="62.0" prefWidth="162.0" text="RECLAMATIONS" textFill="#f4f3f3">
+               <font>
+                  <Font name="Arial Black" size="14.0" />
+               </font>
+            </Label>
+            <Pane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="1.0" prefWidth="710.0" styleClass="line-color" stylesheets="@style.css" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets top="30.0" />
+               </HBox.margin>
+            </Pane>
+            <ImageView fitHeight="56.0" fitWidth="62.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+               <image>
+                  <Image url="@../../img/icons8-settings-64.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+   </top>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="220.0" spacing="10.0" styleClass="container" stylesheets="@style.css" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="220.0">
+               <children>
+                  <ImageView fitHeight="61.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../img/icons8-admin-64.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <VBox alignment="CENTER" prefHeight="46.0" prefWidth="100.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="TOP" prefHeight="18.0" prefWidth="100.0" styleClass="shadow" stylesheets="@style.css" text="ADMINISTRATOR" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Pane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="1.0" prefWidth="10.0" styleClass="line-color" stylesheets="@style.css">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Pane>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="551.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="button-container-mouse-moved">
+                     <children>
+                        <ImageView fitHeight="41.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/icons8-control-panel-64.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="126.0" styleClass="shadow" stylesheets="@style.css" text="DASHBOARD" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="button-container-mouse-moved">
+                     <children>
+                        <ImageView fitHeight="41.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/icons8-inbox-64.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="50.0" styleClass="shadow" stylesheets="@style.css" text="INBOX" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="button-container-mouse-moved">
+                     <children>
+                        <ImageView fitHeight="41.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/icons8-notification-64.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="114.0" styleClass="shadow" stylesheets="@style.css" text="NOTIFICATIONS" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="button-container-mouse-moved">
+                     <children>
+                        <ImageView fitHeight="41.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/icons8-planner-64.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="112.0" styleClass="shadow" stylesheets="@style.css" text="PLANNER" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="button-container-mouse-moved">
+                     <children>
+                        <ImageView fitHeight="41.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/icons8-classroom-64.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="112.0" styleClass="shadow" stylesheets="@style.css" text="TUTORS" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" styleClass="button-container-mouse-moved">
+                     <children>
+                        <ImageView fitHeight="41.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/icons8-graduation-cap-64.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="112.0" styleClass="shadow" stylesheets="@style.css" text="STUDENTS" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css">
+                     <children>
+                        <ImageView fitHeight="41.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../img/icons8-answers-64.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="112.0" styleClass="shadow" stylesheets="@style.css" text="RECLAMATIONS" textFill="WHITE">
+                           <font>
+                              <Font name="Arial Black" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="button-container-mouse-moved" />
+                        <String fx:value="selected-button-container" />
+                     </styleClass>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="634.0" prefWidth="1099.0" styleClass="container" stylesheets="@style.css" BorderPane.alignment="TOP_CENTER">
+         <BorderPane.margin>
+            <Insets right="10.0" top="10.0" />
+         </BorderPane.margin>
+         <children>
+            <TableView fx:id="tableview" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1098.0" styleClass="column-header-background" stylesheets="@style.css">
+              <columns>
+                <TableColumn fx:id="idrec" prefWidth="36.79998856782913" text="ID" />
+                <TableColumn fx:id="fullname" prefWidth="123.19997787475586" text="FULLNAME" />
+                  <TableColumn fx:id="emailrec" prefWidth="103.19996643066406" text="EMAIL" />
+                  <TableColumn fx:id="pnrec" prefWidth="185.5999755859375" text="PHONE NUMBER" />
+                  <TableColumn fx:id="subject" minWidth="1.60003662109375" prefWidth="173.60003662109375" text="SUBJECT" />
+                  <TableColumn fx:id="message" prefWidth="324.0" text="MESSAGE" />
+                  <TableColumn fx:id="stater" prefWidth="139.19989013671875" text="STATE" />
+              </columns>
+               <VBox.margin>
+                  <Insets bottom="20.0" top="20.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </TableView>
+            <HBox prefHeight="194.0" prefWidth="1099.0" styleClass="container" stylesheets="@style.css">
+               <children>
+                  <Button fx:id="deleteButton" alignment="CENTER" contentDisplay="CENTER" lineSpacing="20.0" mnemonicParsing="false" onAction="#supprimerec" prefWidth="72.0" styleClass="button-container-mouse-moved" stylesheets="@style.css" text="DELETE">
+                     <font>
+                        <Font name="Arial Black" size="10.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="updateButton" alignment="CENTER" contentDisplay="CENTER" lineSpacing="20.0" mnemonicParsing="false" onAction="#modifierec" prefWidth="72.0" styleClass="button-container-mouse-moved" stylesheets="@style.css" text="UPDATE">
+                     <font>
+                        <Font name="Arial Black" size="10.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="displayButton" alignment="CENTER" contentDisplay="CENTER" lineSpacing="20.0" mnemonicParsing="false" onAction="#display" prefWidth="72.0" styleClass="button-container-mouse-moved" stylesheets="@style.css" text="DISPLAY">
+                     <font>
+                        <Font name="Arial Black" size="10.0" />
+                     </font>
+                  </Button>
+                  <ComboBox prefWidth="150.0" promptText="sort by" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
