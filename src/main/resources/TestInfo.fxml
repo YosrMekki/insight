@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="anchorPane" prefHeight="555.0" prefWidth="600.0" stylesheets="@AjouterTeststyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TestInfo">   <children>
+      <TextField fx:id="dureetextfield" editable="false" layoutX="220.0" layoutY="192.0" />
+      <Label layoutX="118.0" layoutY="202.0" text="Duree :" />
+      <Label layoutX="122.0" layoutY="268.0" text="Note :" />
+      <TextField fx:id="notetextfield" editable="false" layoutX="221.0" layoutY="258.0" />
+      <Label layoutX="122.0" layoutY="332.0" text="matiére :" />
+      <TextField fx:id="matieretextfield" editable="false" layoutX="221.0" layoutY="322.0" />
+   </children>
+</AnchorPane>
