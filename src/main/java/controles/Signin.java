@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import services.AdminService;
@@ -33,7 +34,7 @@ public class Signin {
     private TextField emailTextfield;
 
     @FXML
-    private TextField passwordTextfield; @FXML
+    private PasswordField passwordTextfield; @FXML
     private Label signupLabel;
 
 
@@ -46,25 +47,37 @@ public class Signin {
 
         try {
             User user = studentService.signIn(email, password);
-            if (user != null && user instanceof Admin) {
-                // Admin user signed in, allow access to dashboard
-                // Load the dashboard interface
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
-
-
-                Parent root = loader.load();
-                Dashboard controller=loader.getController();
-                controller.initData(adminService.getAdminByEmail(email).getFirstName(),adminService.getAdminByEmail(email).getLastName());
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
+            if (user != null) {
+                if (user instanceof Admin) {
+                    // Admin user signed in, allow access to dashboard
+                    // Load the dashboard interface
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
+                    Parent root = loader.load();
+                    Dashboard controller = loader.getController();
+                    controller.initData(adminService.getAdminByEmail(email).getFirstName(), adminService.getAdminByEmail(email).getLastName());
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                } else if (user instanceof Student) {
+                    // Student user signed in, redirect to studentProfile interface
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/studentProfile.fxml"));
+                    Parent root = loader.load();
+                    StudentProfile controller = loader.getController();
+                    controller.initData(studentService.getStudentByEmail(email).getFirstName(),studentService.getStudentByEmail(email).getLastName());
+                    // Pass any necessary data to studentProfile interface
+                    // For example: controller.initData(user);
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                }
             } else {
                 // Display an error message for unauthorized access
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Access Denied");
                 alert.setHeaderText(null);
-                alert.setContentText("Only admins are allowed to access the dashboard.");
+                alert.setContentText("Invalid email or password. Please try again.");
                 alert.showAndWait();
             }
         } catch (SQLException | IOException e) {
@@ -77,6 +90,7 @@ public class Signin {
             alert.showAndWait();
         }
     }
+
     @FXML
     void goToSignup(javafx.scene.input.MouseEvent event) {
         try {

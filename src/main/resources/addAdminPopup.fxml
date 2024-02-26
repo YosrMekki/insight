@@ -1,44 +1,41 @@
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.Button?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controles.AddAdminPopup"
-      prefWidth="400" prefHeight="500"
-      style="-fx-background-color: #1554b3; -fx-text-fill: white; -fx-padding: 20;"
-      spacing="10">
+<?xml version="1.0" encoding="UTF-8"?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.layout.*?>
+        <?import java.lang.*?>
+        <?import java.util.*?>
+        <?import java.net.URL?>
+        <VBox xmlns="http://javafx.com/javafx"
+              xmlns:fx="http://javafx.com/fxml"
+              fx:controller="controles.AddAdminPopup"
+              prefWidth="400" prefHeight="500"
+              styleClass="root"
+              spacing="10"
+              alignment="CENTER">
+    <stylesheets>
+        <URL value="@addAdminPopup.css" />
+    </stylesheets>
+<Label text="Add Admin" styleClass="label" />
 
-    <Label text="Add Admin" style="-fx-font-size: 18px; " />
+<Label text="Enter Email" />
+<TextField fx:id="emailTextfield" styleClass="text-field" />
 
-    <Label text="Entrez l'email" />
-    <TextField fx:id="emailTextfield" prefWidth="250" />
+<Label text="Enter Password" />
+<PasswordField fx:id="passwordTextfield" styleClass="password-field" />
 
-    <Label text="Entrez le mot de passe" />
-    <PasswordField fx:id="passwordTextfield" prefWidth="250" />
+<Label text="Enter First Name" />
+<TextField fx:id="firstNameTextfield" styleClass="text-field" />
 
-    <Label text="Entrez le prénom" />
-    <TextField fx:id="firstNameTextfield" prefWidth="250" />
+<Label text="Enter Last Name" />
+<TextField fx:id="lastNameTextfield" styleClass="text-field" />
 
-    <Label text="Entrez le nom" />
-    <TextField fx:id="lastNameTextfield" prefWidth="250" />
+<Label text="Enter Birth Date" />
+<DatePicker fx:id="date" styleClass="date-picker" />
 
+<Label text="Enter Phone Number" />
+<TextField fx:id="phoneNumberTextfield" styleClass="text-field" />
 
+<Label text="Enter Cin" />
+<TextField fx:id="cinTextfield" styleClass="text-field" />
 
-    <Label text="Entrez la date de naissance" />
-    <DatePicker fx:id="date" prefWidth="250" />
-
-    <Label text="Entrez le numéro de téléphone" />
-    <TextField fx:id="phoneNumberTextfield" prefWidth="250" />
-
-    <Label text="Entrez le numéro cin" />
-    <TextField fx:id="cinTextfield" prefWidth="250" />
-
-
-
-
-
-    <Button text="Ajoute admin" onAction="#addAdmin" />
+<Button text="Add Admin" styleClass="button" onAction="#addAdmin" />
 </VBox>

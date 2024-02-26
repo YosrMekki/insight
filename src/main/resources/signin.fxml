@@ -14,6 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.PasswordField?>
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.Signin">
   <children>
     <MenuBar VBox.vgrow="NEVER">
@@ -77,7 +78,7 @@
             <Label layoutX="311.0" layoutY="114.0" text="Entrez votre email" textFill="WHITE" />
             <TextField fx:id="emailTextfield" layoutX="311.0" layoutY="139.0" />
             <Label layoutX="307.0" layoutY="182.0" text="Entrez votre mot de passe" textFill="WHITE" />
-            <TextField fx:id="passwordTextfield" layoutX="311.0" layoutY="204.0" />
+            <PasswordField fx:id="passwordTextfield" layoutX="311.0" layoutY="204.0" />
             <Button layoutX="376.0" layoutY="260.0" mnemonicParsing="false" onAction="#signin" text="Entrez" />
           <Label fx:id="signupLabel" layoutX="78.0" layoutY="230.0" text="Inscrivez-vous ?" textFill="#1554b3" onMouseClicked="#goToSignup" />
 

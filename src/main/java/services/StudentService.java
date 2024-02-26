@@ -90,12 +90,12 @@ public class StudentService implements IService<Student>{
                     int cin = adminResultSet.getInt("cin");
 
                     // Set other admin properties as needed
-                    return new Admin( email, password, firstName, lastName,birthDate,phoneNumber,cin);
+                    return new Admin( email, password, firstName, lastName, birthDate, phoneNumber, cin);
                 }
             }
         }
 
-        // Query the student table
+        // If admin not found, query the student table
         String studentQuery = "SELECT * FROM student WHERE email = ? AND password = ?";
         try (PreparedStatement studentStatement = connection.prepareStatement(studentQuery)) {
             studentStatement.setString(1, email);
@@ -103,24 +103,23 @@ public class StudentService implements IService<Student>{
             try (ResultSet studentResultSet = studentStatement.executeQuery()) {
                 if (studentResultSet.next()) {
                     // Student found, return Student object
-                    String id = studentResultSet.getString("id");
+                    // Adjust the ResultSet fields based on your student table columns
+                    int id = studentResultSet.getInt("id");
                     String firstName = studentResultSet.getString("firstName");
                     String lastName = studentResultSet.getString("lastName");
                     Date birthDate = studentResultSet.getDate("birthDate");
                     int phoneNumber = studentResultSet.getInt("phoneNumber");
                     int cin = studentResultSet.getInt("cin");
+
                     // Set other student properties as needed
-                    return new Student(email, password, firstName, lastName,birthDate,phoneNumber,cin);
+                    return new Student(id, email, password, firstName, lastName, birthDate, phoneNumber, cin);
                 }
             }
         }
 
-        // No user found, return null
+        // Neither admin nor student found with the provided credentials
         return null;
     }
-
-
-
 
 
     public Student getStudentByEmail(String email) throws SQLException {

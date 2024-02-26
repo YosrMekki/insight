@@ -1,47 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controles.AddProfessorPopup"
       prefWidth="400" prefHeight="500"
-      style="-fx-background-color: #1554b3; -fx-text-fill: white; -fx-padding: 20;"
-      spacing="10">
+      styleClass="popup-container"
+      spacing="10"
+      alignment="CENTER">
+    <stylesheets>
+        <URL value="@addAdminPopup.css"/>
+    </stylesheets>
 
-    <Label text="Add professor" style="-fx-font-size: 18px; " />
+    <Label text="Ajouter professor" styleClass="popup-title" />
 
-    <Label text="Entrez l'email" />
+    <Label text="Entrez l'email" styleClass="popup-label" />
     <TextField fx:id="emailTextfield" prefWidth="250" />
 
-    <Label text="Entrez le mot de passe" />
+    <Label text="Entrez le mot de passe" styleClass="popup-label" />
     <PasswordField fx:id="passwordTextfield" prefWidth="250" />
 
-    <Label text="Entrez le prénom" />
+    <Label text="Entrez le prénom" styleClass="popup-label" />
     <TextField fx:id="firstNameTextfield" prefWidth="250" />
 
-    <Label text="Entrez le nom" />
+    <Label text="Entrez le nom" styleClass="popup-label" />
     <TextField fx:id="lastNameTextfield" prefWidth="250" />
 
-
-
-    <Label text="Entrez la date de naissance" />
+    <Label text="Entrez la date de naissance" styleClass="popup-label" />
     <DatePicker fx:id="date" prefWidth="250" />
 
-    <Label text="Entrez le numéro de téléphone" />
+    <Label text="Entrez le numéro de téléphone" styleClass="popup-label" />
     <TextField fx:id="phoneNumberTextfield" prefWidth="250" />
 
-    <Label text="Entrez le numéro cin" />
+    <Label text="Entrez le numéro cin" styleClass="popup-label" />
     <TextField fx:id="cinTextfield" prefWidth="250" />
 
-
-
-
-
-    <Button text="Ajoutee prof" onAction="#addProfessor" />
+    <Button text="Ajouter professeur" styleClass="popup-button" onAction="#addProfessor" />
 </VBox>
-

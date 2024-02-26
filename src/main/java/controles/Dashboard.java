@@ -16,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -106,6 +107,8 @@ public class Dashboard {
     private Button studentsButton;
     @FXML
     private Button professorsButton;
+    @FXML
+    private Button logoutButton;
 
 
     private final StudentService studentService = new StudentService();
@@ -158,7 +161,7 @@ public class Dashboard {
 
 
     public void initData(String firstName, String lastName) {
-        firstNameLabel.setText(  firstName+" ");
+        firstNameLabel.setText(  firstName+"");
         lastNameLabel.setText(lastName);
         System.out.println(firstName+ lastName);
     }
@@ -420,6 +423,8 @@ public class Dashboard {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
             stage.showAndWait();
+
+
         } catch (IOException e) {
             e.printStackTrace();
             // Handle the exception
@@ -427,7 +432,6 @@ public class Dashboard {
     }
 
     public void addProfessor(ActionEvent actionEvent) {
-
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/addProfessorPopup.fxml"));
             Parent root = fxmlLoader.load();
@@ -436,7 +440,17 @@ public class Dashboard {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
+
+            // Show the popup and wait for it to be closed
             stage.showAndWait();
+
+            // Reload the professor table data after the popup is closed
+            professorTable.getItems().clear(); // Clear existing data
+            try {
+                professorTable.getItems().addAll(professorService.Display()); // Reload data from service
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             // Handle the exception
@@ -444,6 +458,23 @@ public class Dashboard {
     }
 
 
+    @FXML
+    void logout(ActionEvent event) {
+        try {
+            // Load the sign-in interface (assuming it's named "SignIn.fxml")
+            Parent root = FXMLLoader.load(getClass().getResource("/Signin.fxml"));
+            Scene scene = new Scene(root);
+
+            // Get the stage information
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set the new scene in the stage
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

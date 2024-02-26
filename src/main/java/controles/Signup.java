@@ -47,7 +47,7 @@ public class Signup {
     private TextField numTelTextfield;
 
     @FXML
-    private PasswordField passwordTextfield;
+    private TextField passwordTextfield;
 
     @FXML
     private TextField prenomTextfield;

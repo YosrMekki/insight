@@ -92,7 +92,7 @@
                   <TextField fx:id="numCinTextfield" layoutX="245.0" layoutY="225.0" prefHeight="26.0" prefWidth="150.0" />
                   <Label layoutX="431.0" layoutY="204.0" text="Entrez votre email" textFill="WHITE" />
                   <TextField fx:id="emailTextfield" layoutX="429.0" layoutY="225.0" prefHeight="26.0" prefWidth="150.0" />
-                  <PasswordField fx:id="passwordTextfield" layoutX="246.0" layoutY="284.0" />
+                  <TextField fx:id="passwordTextfield" layoutX="246.0" layoutY="284.0" />
                   <Label layoutX="248.0" layoutY="260.0" text="Entrez votre mot de passe" textFill="WHITE" />
             </children>
           </AnchorPane>
