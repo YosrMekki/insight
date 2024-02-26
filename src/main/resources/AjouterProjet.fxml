@@ -23,7 +23,7 @@
             <Insets />
          </opaqueInsets>
       </Button>
-      <TableView fx:id="projetTable" layoutX="181.0" layoutY="298.0" prefHeight="200.0" prefWidth="547.0">
+      <TableView fx:id="projetTable" layoutX="165.0" layoutY="298.0" prefHeight="200.0" prefWidth="622.0">
           <columns>
               <TableColumn fx:id="idProjetTV" prefWidth="75.0" text="IDProjet" >
                   <cellValueFactory>
@@ -45,11 +45,8 @@
                       <PropertyValueFactory property="nomEntreprise" />
                   </cellValueFactory>
               </TableColumn>
-
-            <TableColumn fx:id="projetActionComumn" prefWidth="87.9999877929688" text="Actions" />
+            <TableColumn fx:id="projetActionComumn" prefWidth="163.19998779296873" text="Actions" />
         </columns>
       </TableView>
-      <Button layoutX="737.0" layoutY="371.0" mnemonicParsing="false" onAction="#modifier" prefHeight="26.0" prefWidth="71.0" text="Modifier" />
-      <Button layoutX="737.0" layoutY="333.0" mnemonicParsing="false" onAction="#supprimer" text="Supprimer" />
    </children>
 </AnchorPane>
