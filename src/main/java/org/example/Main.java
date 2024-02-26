@@ -1,21 +1,19 @@
 package org.example;
+import models.Formation;
+import services.FormationService;
 
-import services.StudentService;
+import utils.Mydatabase;
 
 import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
 
-
-        StudentService studentService = new StudentService();
+FormationService formationService=new FormationService();
         try {
-            System.out.println(   studentService.isEmailUnique("sarra@pi.com")
-            );
+            System.out.println(formationService.recuperer());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
+    }}
 
-
-}
