@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProjetInfo">
+   <children>
+      <TextField fx:id="nomEntreprise" editable="false" layoutX="148.0" layoutY="258.0" prefHeight="26.0" prefWidth="303.0" />
+      <TextField fx:id="nonProjet" editable="false" layoutX="150.0" layoutY="98.0" prefHeight="26.0" prefWidth="303.0" />
+      <TextArea fx:id="DescriptionProjet" editable="false" layoutX="150.0" layoutY="152.0" prefHeight="82.0" prefWidth="303.0" />
+   </children>
+</AnchorPane>
