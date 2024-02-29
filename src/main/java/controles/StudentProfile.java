@@ -1,5 +1,6 @@
 package controles;
 
+import entities.Student;
 import javafx.fxml.FXML;
 import services.StudentService;
 import javafx.scene.control.Label;
@@ -34,9 +35,9 @@ public class StudentProfile {
         // Set action for the "Mon Compte" button
 
     }
-    public void initData(String firstName,String lastName){
-        firstNameLabel.setText(firstName);
-        lastNameLabel.setText(lastName);
+    public void initData(Student student){
+        firstNameLabel.setText(student.getFirstName());
+        lastNameLabel.setText(student.getLastName());
     }
 
 

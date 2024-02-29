@@ -46,7 +46,6 @@ public class StudentService implements IService<Student>{
         PreparedStatement preparedStatement = connection.prepareStatement(request);
         preparedStatement.setInt(1, student.getId());
         preparedStatement.executeUpdate();
-
     }
 
     @Override
@@ -161,6 +160,14 @@ public class StudentService implements IService<Student>{
 
         return false; // Default to false if something went wrong with the query
     }
+    public void updatePassword(Student student) throws SQLException {
+        String request = "UPDATE student SET password=? WHERE email=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(request);
+        preparedStatement.setString(1, student.getPassword());
+        preparedStatement.setString(2, student.getEmail()); // Assuming ID is the primary key
+        preparedStatement.executeUpdate();
+    }
+
 
 
 }

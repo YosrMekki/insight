@@ -50,6 +50,7 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
         phoneNumberField = new TextField(String.valueOf(initialStudent.getPhoneNumber()));
         emailField = new TextField(initialStudent.getEmail());
 
+
         // Add labels and text fields to the grid
         grid.add(new Label("Prénom:"), 0, 0);
         grid.add(firstNameField, 1, 0);
@@ -98,7 +99,9 @@ public class EditStudentPopup extends Dialog<Pair<Student, String>> {
                     return null;
                 }
 
-                // Validate CIN (not implemented yet)
+                if (!isValidPhoneNumber(cinString)){
+                    showAlert(Alert.AlertType.ERROR,"cin invalide","Veuillez entrer un cin valide");
+                }
 
                 // Create updated student object
                 Student updatedStudent = new Student(
