@@ -49,7 +49,7 @@ public class Signin {
     private Label forgotPasswordLabel;
     @FXML
     private Button forgotPassword;
-    private final EmailSenderService emailService = new EmailSenderService("smtp.gmail.com","587","sarramadeh@gmail.com","lkej uayo bxes qxdn");
+    private final EmailSenderService emailService = new EmailSenderService("smtp.gmail.com","587","pinsight76@gmail.com\n","hfee wchg dbta qazd\n");
     private final PasswordResetService passwordResetService = new PasswordResetService();
     StudentService studentService = new StudentService();
     @FXML
