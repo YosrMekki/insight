@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.BorderPane?>
 <?import java.net.URL?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.shape.Rectangle?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controles.StudentProfile"
+            fx:controller="controles.ProfessorProfile"
             prefHeight="600.0" prefWidth="1000.0"
-            style="-fx-background-color: #1554b3;"
-            >
+            style="-fx-background-color: #1554b3;">
     <stylesheets>
-        <URL value="@studentProfile.css" />
+        <URL value="@professorProfile.css" />
     </stylesheets>
 
     <!-- Define the white rectangle -->
@@ -47,9 +42,6 @@
 
     <!-- Add the button below the logo -->
     <Button fx:id="monCompteButton" text="Mon Compte" layoutX="10.0" layoutY="210.0" style="-fx-background-color: #1554b3; -fx-text-fill: white; -fx-font-size: 18px;"/>
-    <Button fx:id="notesButton" text="Note"  layoutX="10.0" prefWidth="125.0" layoutY="300.0" style="-fx-background-color: #1554b3; -fx-text-fill: white; -fx-font-size: 18px;" />
-    <Button fx:id="logoutButton" text="Logout" layoutX="30.0" layoutY="520.0" onAction="#logout" styleClass="logout-button"/>
-
     <!-- Define the cadre for information labels -->
     <!-- Define the cadre for information labels -->
     <BorderPane fx:id="profilePane" layoutX="400.0" layoutY="150.0" styleClass="info-cadre" visible="false">
@@ -82,18 +74,5 @@
             </VBox>
         </center>
     </BorderPane>
-    <Button fx:id="ajouterNoteButton" text="Ajouter Note" layoutX="670.0" layoutY="210.0" style="-fx-background-color: #ffff; -fx-text-fill: #1554b3; -fx-font-size: 18px;" visible="false"/>
 
-    <!-- Add TableView for displaying notes -->
-    <TableView fx:id="notesTableView" layoutX="400.0" layoutY="250.0" prefHeight="200.0" visible="false">
-        <columns>
-            <TableColumn text="Note Content" prefWidth="300.0" >
-                <cellValueFactory>
-                    <PropertyValueFactory property="noteContent"/>
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="100"/>
-            <!-- Add more columns if needed -->
-        </columns>
-    </TableView>
 </AnchorPane>

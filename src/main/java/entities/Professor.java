@@ -13,4 +13,5 @@ public class Professor extends User{
         super(email, passwd, firstName, lastName, birthDate, phoneNumber, cin);
         setRole("professor");
     }
+    public Professor(){}
 }

@@ -79,9 +79,10 @@
             <TextField fx:id="emailTextfield" layoutX="311.0" layoutY="139.0" />
             <Label layoutX="307.0" layoutY="182.0" text="Entrez votre mot de passe" textFill="WHITE" />
             <PasswordField fx:id="passwordTextfield" layoutX="311.0" layoutY="204.0" />
-          <Button  fx:id="forgotPassword" onAction="#forgotPassword" text="Forgot Password" />
+          <Button layoutX="320.0" layoutY="260.0" mnemonicParsing="false" onAction="#signin" text="Entrez" style="-fx-background-color: #ffff; -fx-text-fill: #1554b3 "  />
+          <Button fx:id="forgotPassword" layoutX="380.0" layoutY="260.0" mnemonicParsing="false" onAction="#forgotPassword" text="mot de passe oublié" style="-fx-background-color: #ffff; -fx-text-fill: #1554b3 " />
 
-          <Button layoutX="376.0" layoutY="260.0" mnemonicParsing="false" onAction="#signin" text="Entrez" />
+
           <Label fx:id="signupLabel" layoutX="78.0" layoutY="230.0" text="Inscrivez-vous ?" textFill="#1554b3" onMouseClicked="#goToSignup" />
 
       </children>

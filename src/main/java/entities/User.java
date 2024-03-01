@@ -33,6 +33,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.cin = cin;
     }
+    public User(){}
     public int getId() {
         return id;
     }

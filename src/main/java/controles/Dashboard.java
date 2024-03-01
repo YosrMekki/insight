@@ -109,6 +109,10 @@ public class Dashboard {
     private Button professorsButton;
     @FXML
     private Button logoutButton;
+    @FXML
+    private TextField searchField ;
+    @FXML
+    private Button searchid ;
 
 
     private final StudentService studentService = new StudentService();
@@ -185,6 +189,9 @@ public class Dashboard {
             private final HBox container = new HBox(editButton, deleteButton);
 
             {
+                editButton.setStyle("-fx-background-color: #1554b3; -fx-text-fill: white; -fx-min-width: 40px; -fx-font-size: 12px;");
+                deleteButton.setStyle("-fx-background-color: #1554b3; -fx-text-fill: white; -fx-min-width: 40px; -fx-font-size: 12px;");
+
                 editButton.setOnAction(event -> {
                     // Handle edit action
                     handleEditButton();
@@ -195,7 +202,6 @@ public class Dashboard {
                     handleDeleteButton();
                 });
             }
-
 
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -216,6 +222,9 @@ public class Dashboard {
             private final HBox container = new HBox(editButton, deleteButton);
 
             {
+                editButton.setStyle("-fx-background-color: #1554b3; -fx-text-fill: white; -fx-min-width: 40px; -fx-font-size: 12px;");
+                deleteButton.setStyle("-fx-background-color: #1554b3; -fx-text-fill: white; -fx-min-width: 40px; -fx-font-size: 12px;");
+
                 editButton.setOnAction(event -> {
                     // Handle edit action
                     handleProfessorEditButton();
@@ -226,7 +235,6 @@ public class Dashboard {
                     handleProfessorDeleteButton();
                 });
             }
-
 
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -239,6 +247,8 @@ public class Dashboard {
             }
         });
     }
+
+
 
     @FXML
     private void handleEditButton() {
@@ -406,6 +416,8 @@ public class Dashboard {
     public void showDataTable() {
         professorTable.setVisible(false);
         studentTable.setVisible(true);
+        searchField.setVisible(true);
+        searchid.setVisible(true);
     }
     public void showProfessorDataTable(ActionEvent actionEvent) {
         studentTable.setVisible(false);
@@ -477,10 +489,43 @@ public class Dashboard {
     }
 
 
+    @FXML
+    private void handleSearch(ActionEvent event) {
+        String searchTerm = searchField.getText().trim();
+        if (!searchTerm.isEmpty()) {
+            // Filter the student and professor lists based on the search term
+            filterStudents(searchTerm);
+            filterProfessors(searchTerm);
+        } else {
+            // If the search term is empty, display all students and professors
+            try {
+                displayStudents();
+                displayProfessors();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle the exception
+            }
+        }
+    }
 
+    private void filterStudents(String searchTerm) {
+        try {
+            List<Student> filteredStudents = studentService.searchStudents(searchTerm);
+            studentTable.setItems(FXCollections.observableArrayList(filteredStudents));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception
+        }
+    }
 
-
-
-
+    private void filterProfessors(String searchTerm) {
+        try {
+            List<Professor> filteredProfessors = professorService.searchProfessors(searchTerm);
+            professorTable.setItems(FXCollections.observableArrayList(filteredProfessors));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the exception
+        }
+    }
 }
 

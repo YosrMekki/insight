@@ -92,6 +92,51 @@ public class ProfessorService implements IService<Professor>{
         return false; // Default to false if something went wrong with the query
     }
 
+    public List<Professor> searchProfessors(String searchTerm) throws SQLException {
+        List<Professor> professorList = new ArrayList<>();
+        String query = "SELECT * FROM professor WHERE firstName LIKE ? OR lastName LIKE ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, "%" + searchTerm + "%"); // Utilisez le terme de recherche avec le joker % pour rechercher des correspondances partielles
+        statement.setString(2, "%" + searchTerm + "%");
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String email = resultSet.getString("email");
+            String password = resultSet.getString("password");
+            String firstName = resultSet.getString("firstName");
+            String lastName = resultSet.getString("lastName");
+            Date birthDate = resultSet.getDate("birthDate");
+            int phoneNumber = resultSet.getInt("phoneNumber");
+            int cin = resultSet.getInt("cin");
+            Professor student = new Professor(id, email, password, firstName, lastName, birthDate, phoneNumber, cin);
+            professorList.add(student);
+        }
+        return professorList;
+    }
+
+    public Professor getProfessorByEmail(String email) throws SQLException {
+        String query = "SELECT * FROM professor WHERE email = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, email);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String firstName = resultSet.getString("firstName");
+            String lastName = resultSet.getString("lastName");
+            String password = resultSet.getString("password");
+            Date birthDate = resultSet.getDate("birthDate");
+            int phoneNumber = resultSet.getInt("phoneNumber");
+            int cin = resultSet.getInt("cin");
+            // Create and return a Student object
+            return new Professor( id,email, password, firstName, lastName, birthDate, phoneNumber, cin);
+        }
+
+        // Return null if student not found with the given email
+        return null;
+    }
+
+
 
 
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Button?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controles.EditStudentFromProfile"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <?import javafx.scene.control.Button?>
+    <?import javafx.scene.control.Label?>
+    <?import javafx.scene.control.TextField?>
+    <?import javafx.scene.control.DatePicker?>
+    <?import javafx.scene.layout.VBox?>
+
+    <VBox >
+
+        <Label
+                text="Modifier Informations"/>
+
+        <Label layoutX="248.0" layoutY="78.0" text="Entrez votre nom" textFill="BLACK" />
+        <TextField fx:id="nomTextfield" layoutX="245.0" layoutY="102.0" />
+        <Label layoutX="435.0" layoutY="78.0" text="Entrez votre prénom" textFill="BLACK" />
+        <TextField fx:id="prenomTextfield" layoutX="429.0" layoutY="102.0" prefHeight="26.0" prefWidth="150.0" />
+        <Label layoutX="433.0" layoutY="143.0" text="Entrez votre numéro de téléphone" textFill="BLACK" />
+        <Label layoutX="248.0" layoutY="143.0" text="Entrez votre date de naissance" textFill="BLACK" />
+        <DatePicker fx:id="date" layoutX="244.0" layoutY="164.0" prefHeight="26.0" prefWidth="150.0" />
+        <TextField fx:id="numTelTextfield" layoutX="429.0" layoutY="164.0" prefHeight="26.0" prefWidth="150.0" />
+        <Label layoutX="248.0" layoutY="204.0" text="Entrez votre numéro cin" textFill="BLACK" />
+        <TextField fx:id="numCinTextfield" layoutX="245.0" layoutY="225.0" prefHeight="26.0" prefWidth="150.0" />
+        <Label layoutX="431.0" layoutY="204.0" text="Entrez votre email" textFill="BLACK" />
+        <TextField fx:id="emailTextfield" layoutX="429.0" layoutY="225.0" prefHeight="26.0" prefWidth="150.0" />
+        <TextField fx:id="passwordTextfield" layoutX="246.0" layoutY="284.0" />
+        <Label layoutX="248.0" layoutY="260.0" text="Entrez votre mot de passe" textFill="BLACK" />
+
+        <!-- Add more labels and text fields for other information -->
+
+        <Button text="Enregistrer" onAction="#saveButtonClicked"/>
+    </VBox>
+
+</AnchorPane>

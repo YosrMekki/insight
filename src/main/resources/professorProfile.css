@@ -1,0 +1,22 @@
+.main-pane {
+    -fx-background-color: #1554b3;
+}
+
+.info-label, .info-display-label {
+    -fx-font-size: 24px; /* Increase font size */
+    -fx-text-fill: white; /* Set text color to white */
+    -fx-alignment: center; /* Center align text */
+}
+
+.info-cadre {
+    -fx-padding: 30px 50px;;
+    -fx-border-color: white;
+    -fx-border-radius: 10px;
+    -fx-border-width: 4px 2px;
+    -fx-alignment: center; /* Center the border */
+}
+.label-container {
+    -fx-alignment: center; /* Center align labels horizontally */
+    -fx-spacing: 20px; /* Adjust spacing between labels */
+}
+

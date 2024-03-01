@@ -1,8 +1,6 @@
 package services;
 
-import entities.Admin;
-import entities.Student;
-import entities.User;
+import entities.*;
 import utils.DB;
 
 import java.sql.*;
@@ -115,8 +113,27 @@ public class StudentService implements IService<Student>{
                 }
             }
         }
+        String professorQuery = "SELECT * FROM professor WHERE email = ? AND password = ?";
+        try (PreparedStatement professorStatement = connection.prepareStatement(professorQuery)) {
+            professorStatement.setString(1, email);
+            professorStatement.setString(2, password);
+            try (ResultSet professorResultSet = professorStatement.executeQuery()) {
+                if (professorResultSet.next()) {
+                    // Professor found, return Professor object
+                    // Adjust the ResultSet fields based on your professor table columns
+                    int id = professorResultSet.getInt("id");
+                    String firstName = professorResultSet.getString("firstName");
+                    String lastName = professorResultSet.getString("lastName");
+                    Date birthDate = professorResultSet.getDate("birthDate");
+                    int phoneNumber = professorResultSet.getInt("phoneNumber");
+                    int cin = professorResultSet.getInt("cin");
 
-        // Neither admin nor student found with the provided credentials
+                    return new Professor(id, email, password, firstName, lastName,birthDate,phoneNumber,cin);
+                }
+            }
+        }
+
+        // Neither admin nor student no professor found with the provided credentials
         return null;
     }
 
@@ -128,7 +145,7 @@ public class StudentService implements IService<Student>{
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
-            String id = resultSet.getString("id");
+            int id = resultSet.getInt("id");
             String firstName = resultSet.getString("firstName");
             String lastName = resultSet.getString("lastName");
             String password = resultSet.getString("password");
@@ -136,7 +153,7 @@ public class StudentService implements IService<Student>{
             int phoneNumber = resultSet.getInt("phoneNumber");
             int cin = resultSet.getInt("cin");
             // Create and return a Student object
-            return new Student( email, password, firstName, lastName, birthDate, phoneNumber, cin);
+            return new Student( id,email, password, firstName, lastName, birthDate, phoneNumber, cin);
         }
 
         // Return null if student not found with the given email
@@ -168,6 +185,71 @@ public class StudentService implements IService<Student>{
         preparedStatement.executeUpdate();
     }
 
+    public List<Student> searchStudents(String searchTerm) throws SQLException {
+        List<Student> studentList = new ArrayList<>();
+        String query = "SELECT * FROM student WHERE firstName LIKE ? OR lastName LIKE ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, "%" + searchTerm + "%"); // Utilisez le terme de recherche avec le joker % pour rechercher des correspondances partielles
+        statement.setString(2, "%" + searchTerm + "%");
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String email = resultSet.getString("email");
+            String password = resultSet.getString("password");
+            String firstName = resultSet.getString("firstName");
+            String lastName = resultSet.getString("lastName");
+            Date birthDate = resultSet.getDate("birthDate");
+            int phoneNumber = resultSet.getInt("phoneNumber");
+            int cin = resultSet.getInt("cin");
+            Student student = new Student(id, email, password, firstName, lastName, birthDate, phoneNumber, cin);
+            studentList.add(student);
+        }
+        return studentList;
+    }
 
+    //Note jointure
+    public void addNote(int studentId, String noteContent) throws SQLException {
+        String query = "INSERT INTO note (studentId, noteContent) VALUES (?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, studentId);
+            statement.setString(2, noteContent);
+            statement.executeUpdate();
+        }
+    }
+    public List<Note> getNotesByStudentId(int studentId) throws SQLException {
+        List<Note> notes = new ArrayList<>();
+        String query = "SELECT * FROM note WHERE studentId = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, studentId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Note note = new Note();
+                    note.setId(resultSet.getInt("id"));
+                    note.setNoteContent(resultSet.getString("noteContent"));
+                    // Add more properties as needed
+                    notes.add(note);
+                }
+            }
+        }
+        return notes;
+    }
+
+
+    public void updateNoteContent(int noteId, String newNoteContent) throws SQLException {
+        String query = "UPDATE note SET noteContent = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, newNoteContent);
+            statement.setInt(2, noteId);
+            statement.executeUpdate();
+        }
+    }
+
+    public void deleteNoteById(int noteId) throws SQLException {
+        String query = "DELETE FROM note WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, noteId);
+            statement.executeUpdate();
+        }
+    }
 
 }

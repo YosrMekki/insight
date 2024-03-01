@@ -9,6 +9,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import entities.Admin;
+import entities.Professor;
 import entities.Student;
 import entities.User;
 import javafx.event.ActionEvent;
@@ -20,10 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import services.AdminService;
-import services.EmailSenderService;
-import services.PasswordResetService;
-import services.StudentService;
+import services.*;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -62,6 +60,7 @@ public class Signin {
         String password = passwordTextfield.getText();
         AdminService adminService = new AdminService();
         StudentService studentService = new StudentService();
+        ProfessorService professorService = new ProfessorService();
 
         try {
             User user = studentService.signIn(email, password);
@@ -83,8 +82,19 @@ public class Signin {
                     Parent root = loader.load();
                     StudentProfile controller = loader.getController();
                     controller.initData(studentService.getStudentByEmail(email));
+                    controller.setStudent(studentService.getStudentByEmail(email));
                     // Pass any necessary data to studentProfile interface
                     // For example: controller.initData(user);
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                }else if (user instanceof Professor) {
+                    // Professor user signed in
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/professorProfile.fxml"));
+                    Parent root = loader.load();
+                    ProfessorProfile controller = loader.getController();
+                    controller.initData(professorService.getProfessorByEmail(email));
                     Scene scene = new Scene(root);
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     stage.setScene(scene);
