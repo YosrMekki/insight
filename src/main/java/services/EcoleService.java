@@ -120,6 +120,95 @@ public class EcoleService implements IService<Ecole> {
 
         return nomsEcoles;
     }
+
+    public Ecole getEcoleByNom(String nom){
+
+        Ecole ecole = null;
+
+        // Connexion à la base de données
+            // Requête SQL paramétrée pour récupérer une école par son nom
+            String query = "SELECT * FROM ecole WHERE nom = ?";
+            try (PreparedStatement statement = connexion.prepareStatement(query)) {
+                statement.setString(1, nom);
+                // Exécution de la requête
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    // Vérifier si une école avec le nom spécifié a été trouvée
+                    if (resultSet.next()) {
+                        int id = resultSet.getInt("id");
+                        String nomEcole = resultSet.getString("nom");
+                        String adresse = resultSet.getString("adresse");
+                        int nbProfesseur = resultSet.getInt("nb_professeur");
+                        ecole = new Ecole(id, nomEcole, adresse, nbProfesseur);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        return ecole;
+    }
+    public Ecole getEcoleById(int id_ecole){
+
+        Ecole ecole = null;
+
+        // Connexion à la base de données
+        // Requête SQL paramétrée pour récupérer une école par son nom
+        String query = "SELECT * FROM ecole WHERE id = ?";
+        try (PreparedStatement statement = connexion.prepareStatement(query)) {
+            statement.setInt(1, id_ecole);
+            // Exécution de la requête
+            try (ResultSet resultSet = statement.executeQuery()) {
+                // Vérifier si une école avec le nom spécifié a été trouvée
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String nomEcole = resultSet.getString("nom");
+                    String adresse = resultSet.getString("adresse");
+                    int nbProfesseur = resultSet.getInt("nb_professeur");
+                    ecole = new Ecole(id, nomEcole, adresse, nbProfesseur);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return ecole;
+    }
+    public int countProfesseursByEcole(Ecole ecole) {
+        // Connexion à la base de données (supposons que vous ayez déjà une classe de gestion de la connexion)
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        int count = 0;
+
+        try {
+            // Requête SQL pour compter le nombre de professeurs associés à une école spécifique
+            String query = "SELECT COUNT(*) AS total FROM professeur WHERE ecole_id = ?";
+            statement = connexion.prepareStatement(query);
+            statement.setInt(1, ecole.getId());
+            resultSet = statement.executeQuery();
+
+            // Récupération du résultat
+            if (resultSet.next()) {
+                count = resultSet.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Gestion des exceptions
+        } finally {
+            // Fermeture des ressources
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return count;
+    }
 }
+
+
 
 

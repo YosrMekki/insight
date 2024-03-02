@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<AnchorPane prefHeight="513.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.AjouterEntreprise">
+    <children>
+        <fx:include source="AdminMenuBar.fxml" />
+
+        <Label layoutX="242.0" layoutY="20.0" prefHeight="51.0" prefWidth="251.0" text="Ajouter Entreprise">
+            <font>
+                <Font size="35.0" />
+            </font>
+        </Label>
+        <Label layoutX="223.0" layoutY="126.0" text="Nom ">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Label layoutX="493.0" layoutY="126.0" text="Adresse">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Label layoutX="223.0" layoutY="254.0" prefHeight="35.0" prefWidth="211.0" text="Numéro de Téléphone">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <TextField fx:id="nomFX" layoutX="223.0" layoutY="175.0" prefHeight="35.0" prefWidth="168.0" />
+        <TextField fx:id="adresseFX" layoutX="493.0" layoutY="175.0" prefHeight="35.0" prefWidth="168.0" />
+        <TextField fx:id="num_telFX" layoutX="223.0" layoutY="300.0" prefHeight="35.0" prefWidth="168.0" />
+        <Button fx:id="valider" layoutX="391.0" layoutY="448.0" mnemonicParsing="false" onAction="#addEntreprise" prefHeight="35.0" prefWidth="136.0" text="Valider" />
+        <Label layoutX="484.0" layoutY="249.0" prefHeight="35.0" prefWidth="211.0" text="Durée du Contrat">
+            <font>
+                <Font size="24.0" />
+            </font>
+            <padding>
+                <Insets top="3.0" />
+            </padding>
+        </Label>
+        <TextField fx:id="dureeContratFX" layoutX="484.0" layoutY="300.0" prefHeight="35.0" prefWidth="168.0">
+            <padding>
+                <Insets top="5.0" />
+            </padding>
+        </TextField>
+    </children>
+</AnchorPane>

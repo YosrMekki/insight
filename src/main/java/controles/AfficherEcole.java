@@ -52,6 +52,7 @@ public class AfficherEcole implements Initializable {
             for (Ecole ecole: ecoles){
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Ecole.fxml"));
                 Pane pane = fxmlLoader.load();
+
                 EcoleController ec = fxmlLoader.getController();
                 ec.setData(ecole);
 

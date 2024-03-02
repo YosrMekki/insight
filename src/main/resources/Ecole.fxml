@@ -2,15 +2,27 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Button?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="163.0" prefWidth="254.0" styleClass="shadow" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.EcoleController">
    <children>
-      <ImageView fitHeight="180.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="img" fitHeight="163.0" fitWidth="254.0" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@/maxresdefault.jpg" />
+         </image>
+      </ImageView>
+      <Button styleClass="icon-button" onAction="#deleteEcole">
+         <graphic>
+            <FontAwesomeIconView glyphName="TIMES" size="16" fill="blue" />
+         </graphic>
+      </Button>
       <HBox prefHeight="163.0" prefWidth="254.0" styleClass="gradient" stylesheets="@../java/css/style.css">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="180.0" prefWidth="107.0">
@@ -55,7 +67,7 @@
                   </Label>
                </children>
             </VBox>
-            <VBox alignment="BOTTOM_CENTER" prefHeight="137.0" prefWidth="77.0">
+            <VBox fx:id="profs_nb" alignment="BOTTOM_CENTER" prefHeight="137.0" prefWidth="77.0">
                <children>
                   <Label fx:id="nb_professeurs" alignment="CENTER" contentDisplay="CENTER" prefHeight="42.0" prefWidth="103.0" textFill="WHITE">
                      <font>

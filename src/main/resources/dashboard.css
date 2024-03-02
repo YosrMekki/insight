@@ -1,36 +1,136 @@
+/* TableView Style */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+/* Table header style */
+.table-view .column-header-background {
+    -fx-background-color: #1554b3;
+}
+
+/* Table column header style */
+.table-view .column-header {
+    -fx-background-color: #1554b3;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+}
+
+/* Table column style */
+.table-view .table-column {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left; /* Adjust alignment if needed */
+}
+
+/* Table row style */
+.table-row-cell {
+    -fx-background-color: #ffffff;
+}
+
+/* Alternating row color */
+.table-row-cell:odd {
+    -fx-background-color: #f2f2f2;
+}
+
+/* Selected row style */
+.table-row-cell:selected {
+    -fx-background-color: #0e3a8b;
+}
+
+/* Cell text color */
+.table-cell {
+    -fx-text-fill: #333333;
+}
+
+/* Horizontal scrollbar style */
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-opacity: 0; /* Hide the scrollbar */
+}
+
+/* Vertical scrollbar style */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+
+/* Menu button style */
 .menu-button {
     -fx-background-color: #1554b3;
     -fx-text-fill: white;
-    -fx-font-size: 16px; /* Adjust font size */
-    -fx-padding: 8px 16px; /* Adjust padding */
+    -fx-font-size: 16px;
+    -fx-padding: 8px 16px;
     -fx-border-radius: 5px;
 }
 
 .menu-button:hover {
     -fx-background-color: #0e3a8b;
 }
-#addAdminButton {
-    -fx-background-color: #1554b3;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
-}
 
-#addAdminButton:hover {
-    -fx-background-color: #0e3a8b;
-}
+/* Add admin button style */
 #addProfessorButton {
-    -fx-background-color: #1554b3;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-background-color: #ffff;
+    -fx-text-fill: #1554b3;
+    -fx-font-size: 13px;
     -fx-padding: 10px 20px;
     -fx-border-radius: 5px;
 }
 
 #addProfessorButton:hover {
-    -fx-background-color: #0e3a8b;
+    -fx-background-color: #4b7fd8;
 }
-#welcomeLabel{
-    -fx-text-fill: #ffff;
+
+/* Add professor button style */
+#addProfessorButton {
+    -fx-background-color: #ffff;
+    -fx-text-fill: #1554b3;
+    -fx-font-size: 13px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+
+#addProfessorButton:hover {
+    -fx-background-color: #4b7fd8;
+}
+
+/* Logout button style */
+.logout-button {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #B71C1C;
+}
+
+.logout-button:hover {
+    -fx-background-color: #FF5252;
+}
+
+/* Search field style */
+#searchField {
+    -fx-background-color: transparent;
+    -fx-border-color: #4b7fd8; /* Border color */
+    -fx-border-radius: 13px; /* Border radius */
+    -fx-prompt-text-fill: #545151; /* Placeholder text color */
+    -fx-text-fill: black; /* Text color */
+    -fx-padding: 8px 12px; /* Padding */
+    -fx-font-size: 12px; /* Font size */
+}
+
+/* Search button style */
+#searchid {
+    -fx-background-color: #4b7fd8; /* Button background color */
+    -fx-text-fill: white; /* Text color */
+    -fx-font-size: 12 px; /* Font size */
+    -fx-padding: 8px 16px; /* Padding */
+    -fx-border-radius: 20px; /* Border radius */
+    -fx-background-radius: 20px; /* Background radius */
+}
+
+#searchid:hover {
+    -fx-background-color: #0e3a8b; /* Hover background color */
 }

@@ -9,89 +9,72 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.Pair;
+import models.Contrat;
 import models.Professeur;
+import services.ContratService;
 import services.ProfService;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class ProfesseurController implements Initializable {
-    public Label nomLabel;
-    public Label prenomLabel;
-    public Button addProfessorButton;
-    public TableView<Professeur> professorTable;
-    public Button addEcole;
-    @FXML
-    private TableColumn<Professeur, Void> professoractionsColumn;
+public class ContratController implements Initializable {
 
+    public TableColumn<Contrat,Integer> idColumn;
+    public TableView<Contrat>  contratTable;
+    public TableColumn<Contrat,Integer>  ecoleColumn;
+    public TableColumn<Contrat,Integer>  dureeColumn;
+    public TableColumn<Contrat, Date>  date_contrat;
+    public Button addContartButton;
+    public TableColumn<Contrat,Void>  contratactionsColumn;
 
-
-    @FXML
-    private TableColumn<Professeur, String> adresseColumn;
-
-    @FXML
-    private TableColumn<Professeur, Integer> idColumn;
-
-    @FXML
-    private TableColumn<Professeur, String> nomColumn;
-
-
-
-    @FXML
-    private TableColumn<Professeur, Integer> phoneNumberColumn;
-
-    @FXML
-    private TableColumn<Professeur, String> prenomColumn;
-
-
-
-
-
-
-    @FXML
-    private Label welcomeLabel;
-    private ProfService profService;
-
+    private ContratService contratService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        profService = new ProfService();
+        contratService = new ContratService();
 
-    }
 
-    public void setData(int id) {
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        prenomColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
-        nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        adresseColumn.setCellValueFactory(new PropertyValueFactory<>("adresse"));
-        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("num_tel"));
+        ecoleColumn.setCellValueFactory(new PropertyValueFactory<>("ecole_id"));
+
+        date_contrat.setCellValueFactory(new PropertyValueFactory<>("date_contrat"));
+        dureeColumn.setCellValueFactory(new PropertyValueFactory<>("nb_days"));
+
 
         initializeActionsColumn();
 
         try {
-            displayProfessors(id);
+            System.out.println("hello");
+            displayContart();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void displayContart() throws SQLException {
+        List<Contrat> contratsList = contratService.recuperer();
+        System.out.println(contratsList);
 
+        ObservableList<Contrat> contrats = FXCollections.observableArrayList(contratsList);
 
+        contratTable.setItems(contrats);
     }
 
     private void initializeActionsColumn() {
-        professoractionsColumn.setCellFactory(param -> new TableCell<>() {
+        contratactionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Edit");
             private final Button deleteButton = new Button("Delete");
-            private final HBox container = new HBox(editButton, deleteButton);
+            private final Button uploadButton = new Button("Print");
+
+            private final HBox container = new HBox(editButton, deleteButton,uploadButton);
 
             {
                 editButton.setOnAction(event -> {
@@ -103,6 +86,11 @@ public class ProfesseurController implements Initializable {
                     // Handle delete action
                     handleDeleteButton();
                 });
+
+                    uploadButton.setOnAction(event -> {
+                        // Handle edit action
+                        handlePrintButton();
+                    });
             }
 
             @Override
@@ -117,31 +105,34 @@ public class ProfesseurController implements Initializable {
         });
     }
 
+    private void handlePrintButton() {
+        Contrat contrat= contratTable.getSelectionModel().getSelectedItem();
+        contratService.printContrat(contrat);
+    }
+
 
     private void handleEditButton() {
-        Professeur selectedProfesseur = professorTable.getSelectionModel().getSelectedItem();
+        Contrat selectedContrat = contratTable.getSelectionModel().getSelectedItem();
 
-        if (selectedProfesseur != null) {
+        if (selectedContrat != null) {
             // Create an instance of the EditStudentPopup dialog
-            EditProfesseurPopup editProfesseurPopup = new EditProfesseurPopup(selectedProfesseur);
+            ContratPoopapController editcontratPopup = new ContratPoopapController(selectedContrat);
 
             // Show the dialog and wait for the user response
-            Optional<Pair<Professeur, String>> result = editProfesseurPopup.showAndWait();
+            Optional<Pair<Contrat, Integer>> result = editcontratPopup.showAndWait();
 
             // If the user clicked the Save button, update the student information
             result.ifPresent(pair -> {
-                Professeur updatedProfesseur = pair.getKey();
-                String newEmail = pair.getValue();
+                Contrat updatedContrat = pair.getKey();
+                Integer newEmail = pair.getValue();
 
                 // Update the selected student with the new information
-                selectedProfesseur.setNom(updatedProfesseur.getNom());
-                selectedProfesseur.setPrenom(updatedProfesseur.getPrenom());
-                selectedProfesseur.setAdresse(updatedProfesseur.getAdresse());
-                selectedProfesseur.setNum_tel(updatedProfesseur.getNum_tel());
+                selectedContrat.setNb_days(updatedContrat.getNb_days());
 
                 try {
                     // Update the changes in the database using the StudentService
-                    profService.modifier(selectedProfesseur);
+                    System.out.println("waaa");
+                    contratService.modifier(selectedContrat);
                 } catch (SQLException e) {
                     e.printStackTrace();
                     // Handle the exception
@@ -149,25 +140,18 @@ public class ProfesseurController implements Initializable {
 
 
                 // Refresh the TableView to reflect the changes
-                professorTable.refresh();
+                contratTable.refresh();
             });
         } else {
             // No student selected, display an error message or handle accordingly
-            System.out.println("No student selected for editing.");
+            System.out.println("No Contrat selected for editing.");
         }
     }
 
 
-    public void displayProfessors(int id) throws SQLException {
-        List<Professeur> professeursList = profService.recupererProfParEcoleId(id);
-        ObservableList<Professeur> professeurs = FXCollections.observableArrayList(professeursList);
-        System.out.println(professeurs);
 
-        professorTable.setItems(professeurs);
-    }
     @FXML
     public void handleProfesseurClick(javafx.scene.input.MouseEvent mouseEvent) {
-
 
     }
 
@@ -175,14 +159,14 @@ public class ProfesseurController implements Initializable {
 
 
     private void handleDeleteButton() {
-            Professeur selectedProfesseur = professorTable.getSelectionModel().getSelectedItem();
+        Contrat selectedContrat = contratTable.getSelectionModel().getSelectedItem();
 
-        if (selectedProfesseur != null) {
+        if (selectedContrat != null) {
             // Create a confirmation dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
-            alert.setHeaderText("Delete Student");
-            alert.setContentText("Are you sure you want to delete " + selectedProfesseur.getNom() + " " + selectedProfesseur.getPrenom() + "?");
+            alert.setHeaderText("Delete Contrat");
+            alert.setContentText("Are you sure you want to delete " + selectedContrat.getNb_days() + " " + selectedContrat.getNb_days() + "?");
 
             // Add OK and Cancel buttons to the dialog
             ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
@@ -196,10 +180,10 @@ public class ProfesseurController implements Initializable {
             if (result.isPresent() && result.get() == okButton) {
                 try {
                     // Delete the selected student from the database using the StudentService
-                    profService.supprimer(selectedProfesseur.getId());
+                    contratService.supprimer(selectedContrat.getId());
 
                     // Remove the selected student from the TableView
-                    professorTable.getItems().remove(selectedProfesseur);
+                    contratTable.getItems().remove(selectedContrat);
                 } catch (SQLException e) {
                     e.printStackTrace();
                     // Handle the exception
@@ -210,36 +194,11 @@ public class ProfesseurController implements Initializable {
             System.out.println("No student selected for deletion.");
         }
     }
-
-    public void AddProf(ActionEvent actionEvent) {
+    public void addEcole(ActionEvent actionEvent) {
         try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterProfesseur.fxml"));
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root);
-
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            System.out.println("hi");
-
-            stage.show();
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-    }
-
-    public void AjouterQuiz(ActionEvent actionEvent) {
-    }
-
-    public void addProf(ActionEvent actionEvent) {
-
-        try {
-            System.out.println("hi");
 
             // Charger la vue AjouterEcole.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterProfesseur.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterEcole.fxml"));
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
@@ -256,4 +215,6 @@ public class ProfesseurController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
 }

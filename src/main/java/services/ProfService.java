@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ProfService implements IService<Professeur>{
     private Connection connexion;
+    private EcoleService es = new EcoleService();
 
     public ProfService() {
         this.connexion = Mydatabase.getInstance().getConnexion();
@@ -50,22 +51,30 @@ public class ProfService implements IService<Professeur>{
 
     @Override
     public List<Professeur> recuperer() throws SQLException {
+        EcoleService es=new EcoleService();
         String sql="select * from professeur";
-        Statement statement=connexion.createStatement();
-        ResultSet rs=statement.executeQuery(sql);
-        List<Professeur> list= new ArrayList<>();
-        while (rs.next()){
-            Professeur p =new Professeur();
-            p.setId(rs.getInt("id"));
-            p.setNom(rs.getString("nom"));
-            p.setPrenom(rs.getString("prenom"));
-            p.setNum_tel(rs.getInt("num_tel"));
-            p.setAdresse(rs.getString("adresse"));
-            p.setEcole(null);
+        List<Professeur> professeurs = new ArrayList<>();
+        try (PreparedStatement statement = connexion.prepareStatement(sql)) {
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Professeur professeur = new Professeur();
+                professeur.setId(rs.getInt("id"));
+                professeur.setNom(rs.getString("nom"));
+                professeur.setPrenom(rs.getString("prenom"));
+                professeur.setNum_tel(rs.getInt("num_tel"));
+                professeur.setAdresse(rs.getString("adresse"));
+                professeur.setEcole_id(rs.getInt("ecole_id"));
 
+                // Si vous souhaitez également charger l'école à laquelle ce professeur est associé, vous pouvez le faire ici
+                // int idEcole = rs.getInt("ecole_id");
+                // Ecole ecole = recupererEcoleParId(idEcole); // Méthode à implémenter
+                // professeur.setEcole(ecole);
+                professeurs.add(professeur);
+            }
         }
-        return list;
+        return professeurs;
     }
+
     public List<Professeur> recupererProfParEcoleId(int idEcole) throws SQLException {
         String sql = "SELECT * FROM professeur WHERE ecole_id = ?";
         List<Professeur> professeurs = new ArrayList<>();
@@ -89,4 +98,26 @@ public class ProfService implements IService<Professeur>{
         return professeurs;
     }
 
+    public List<Professeur> searchProfesseur(String searchTerm)  throws SQLException {
+        List<Professeur> profList = new ArrayList<>();
+        String query = "SELECT * FROM professeur WHERE nom LIKE ? OR prenom LIKE ?";
+        PreparedStatement statement = connexion.prepareStatement(query);
+        statement.setString(1, "%" + searchTerm + "%"); // Utilisez le terme de recherche avec le joker % pour rechercher des correspondances partielles
+        statement.setString(2, "%" + searchTerm + "%");
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String nom = resultSet.getString("nom");
+            String prenom = resultSet.getString("prenom");
+            int num_tel = resultSet.getInt("num_tel");
+            String adresse = resultSet.getString("adresse");
+            int ecole_id = resultSet.getInt("ecole_id");
+
+            Ecole ecole=es.getEcoleById(ecole_id);
+
+           Professeur professeur = new Professeur(id, prenom, nom , adresse,num_tel, ecole_id);
+            profList.add(professeur);
+        }
+        return profList;
+    }
 }

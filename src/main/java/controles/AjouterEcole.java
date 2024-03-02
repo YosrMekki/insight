@@ -10,7 +10,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import models.Contrat;
 import models.Ecole;
+import services.ContratService;
 import services.EcoleService;
 
 import java.net.URL;
@@ -25,6 +27,7 @@ public class AjouterEcole implements Initializable {
     public TextField nb_professeurFX;
     public TextField addresseFX;
     public Button valider;
+    public TextField nb_joursFX;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -35,10 +38,12 @@ public class AjouterEcole implements Initializable {
 
     public void AddEcole(javafx.event.ActionEvent actionEvent) {
         EcoleService ecoleService=new EcoleService();
+        ContratService contratService=new ContratService();
 
         String nom= nomFX.getText();
         String adresse =addresseFX.getText();
         int nb_professeur=Integer.parseInt(nb_professeurFX.getText());
+        int nb_days=Integer.parseInt(nb_joursFX.getText());
 
 
         if (nb_professeur > 10) {
@@ -65,12 +70,23 @@ public class AjouterEcole implements Initializable {
 
 
         Ecole ecole=new Ecole(nom,adresse,nb_professeur);
+
         try {
             ecoleService.ajouter(ecole);
             Alert alert=new Alert(Alert.AlertType.INFORMATION);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+
+            Ecole e=ecoleService.getEcoleByNom(nom);
+            contratService.ajouter(new Contrat(nb_days,e));
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 

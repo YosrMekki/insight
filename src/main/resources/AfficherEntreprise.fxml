@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="570.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.AfficherEntreprise">
+    <stylesheets>
+        <URL value="@dashboard.css" />
+    </stylesheets>
+    <children>
+        <fx:include source="AdminMenuBar.fxml" />
+
+        <Label layoutX="242.0" layoutY="20.0" prefHeight="51.0" prefWidth="330.0" text="Afficher Entreprise">
+            <font>
+                <Font size="35.0" />
+            </font>
+        </Label>
+        <TableView fx:id="entrepriseTable" layoutX="250.0" layoutY="120.0" prefHeight="450.0" prefWidth="790.0">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="75" text="ID">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="nomColumn" prefWidth="131.0" text="Nom">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="nom" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="adresseColumn" prefWidth="205.0" text="Adresse">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="adresse" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="numTelColumn" prefWidth="173.0" text="Numéro de Téléphone">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="num_tel" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="actionsColumn" prefWidth="205.0" text="Actions">
+                    <cellFactory>
+                        <PropertyValueFactory property="DUMMY" />
+                    </cellFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

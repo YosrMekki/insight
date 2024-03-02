@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import java.net.URL?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.ContratController">
+    <stylesheets>
+        <URL value="@dashboard.css" />
+    </stylesheets>
+
+    <fx:include source="AdminMenuBar.fxml" />
+
+        <!-- Welcome message with admin's name -->
+        <HBox layoutX="200.0" layoutY="30.0" spacing="10">
+            <Label fx:id="welcomeLabel" style="-fx-font-size: 24px;" text="Contrats" textFill="#123880"/>
+            <Label fx:id="nomLabel" style="-fx-font-size: 24px;" textFill="WHITE" />
+            <Label fx:id="prenomLabel" style="-fx-font-size: 24px;" textFill="WHITE" />
+        </HBox>
+
+
+
+        <Button fx:id="addContartButton" onAction="#addEcole" layoutX="600.0" layoutY="30.0" text="Ajouter Ecole" />
+
+        <TableView fx:id="contratTable" layoutX="250.0" layoutY="120.0" prefHeight="450.0" prefWidth="790.0">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="75" text="ID">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="ecoleColumn" prefWidth="101.0" text="Ecole ID">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="ecole_id" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="date_contrat" prefWidth="171.0" text="Date de creation contrat">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="date_contrat" />
+                    </cellValueFactory>
+                </TableColumn>
+
+                <TableColumn fx:id="dureeColumn" prefWidth="204.0" text="durée de contrat (jours)">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="nb_days" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="contratactionsColumn" prefWidth="157.0" text="Actions">
+                    <cellFactory>
+                        <PropertyValueFactory property="DUMMY" />
+                    </cellFactory>
+                </TableColumn>
+
+            </columns>
+        </TableView>
+</AnchorPane>

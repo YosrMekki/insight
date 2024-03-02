@@ -9,13 +9,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.Pair;
+import models.Ecole;
 import models.Professeur;
 import services.ProfService;
 
@@ -25,12 +23,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class ProfesseurController implements Initializable {
-    public Label nomLabel;
-    public Label prenomLabel;
-    public Button addProfessorButton;
+public class AllProfesseurController implements Initializable {
+
     public TableView<Professeur> professorTable;
-    public Button addEcole;
+    public TableColumn<Professeur , Ecole> ecole_id;
+    public TextField searchField;
+    public Button searchid;
     @FXML
     private TableColumn<Professeur, Void> professoractionsColumn;
 
@@ -67,24 +65,32 @@ public class ProfesseurController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         profService = new ProfService();
 
-    }
 
-    public void setData(int id) {
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         prenomColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         adresseColumn.setCellValueFactory(new PropertyValueFactory<>("adresse"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("num_tel"));
+        ecole_id.setCellValueFactory(new PropertyValueFactory<>("ecole_id"));
+
 
         initializeActionsColumn();
 
         try {
-            displayProfessors(id);
+            System.out.println("hello");
+            displayProfessors();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void displayProfessors() throws SQLException {
+        List<Professeur> professeursList = profService.recuperer();
+        System.out.println(professeursList);
 
+        ObservableList<Professeur> professeurs = FXCollections.observableArrayList(professeursList);
 
+        professorTable.setItems(professeurs);
     }
 
     private void initializeActionsColumn() {
@@ -158,24 +164,13 @@ public class ProfesseurController implements Initializable {
     }
 
 
-    public void displayProfessors(int id) throws SQLException {
-        List<Professeur> professeursList = profService.recupererProfParEcoleId(id);
-        ObservableList<Professeur> professeurs = FXCollections.observableArrayList(professeursList);
-        System.out.println(professeurs);
 
-        professorTable.setItems(professeurs);
-    }
     @FXML
     public void handleProfesseurClick(javafx.scene.input.MouseEvent mouseEvent) {
 
-
     }
-
-
-
-
     private void handleDeleteButton() {
-            Professeur selectedProfesseur = professorTable.getSelectionModel().getSelectedItem();
+        Professeur selectedProfesseur = professorTable.getSelectionModel().getSelectedItem();
 
         if (selectedProfesseur != null) {
             // Create a confirmation dialog
@@ -230,30 +225,30 @@ public class ProfesseurController implements Initializable {
         }
     }
 
-    public void AjouterQuiz(ActionEvent actionEvent) {
+    @FXML
+    private void handleSearch(ActionEvent event) {
+        String searchTerm = searchField.getText().trim();
+        if (!searchTerm.isEmpty()) {
+            // Filter the student and professor lists based on the search term
+            filterProfessors(searchTerm);
+        } else {
+            // If the search term is empty, display all students and professors
+            try {
+                displayProfessors();
+                displayProfessors();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle the exception
+            }
+        }
     }
-
-    public void addProf(ActionEvent actionEvent) {
-
+    private void filterProfessors(String searchTerm) {
         try {
-            System.out.println("hi");
-
-            // Charger la vue AjouterEcole.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterProfesseur.fxml"));
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root);
-
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            System.out.println("hi");
-
-            // Afficher la fenêtre
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("hellooooo");
-
+            List<Professeur> filteredStudents = profService.searchProfesseur(searchTerm);
+            professorTable.setItems(FXCollections.observableArrayList(filteredStudents));
+        } catch (SQLException e) {
             e.printStackTrace();
+            // Handle the exception
         }
     }
 }
