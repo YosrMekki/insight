@@ -42,6 +42,8 @@
 
     <!-- Add the button below the logo -->
     <Button fx:id="monCompteButton" text="Mon Compte" layoutX="10.0" layoutY="210.0" style="-fx-background-color: #1554b3; -fx-text-fill: white; -fx-font-size: 18px;"/>
+    <Button fx:id="logoutButton" text="Logout" layoutX="30.0" layoutY="520.0" onAction="#logout" styleClass="logout-button"/>
+
     <!-- Define the cadre for information labels -->
     <!-- Define the cadre for information labels -->
     <BorderPane fx:id="profilePane" layoutX="400.0" layoutY="150.0" styleClass="info-cadre" visible="false">

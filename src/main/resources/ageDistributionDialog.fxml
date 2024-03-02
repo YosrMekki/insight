@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="328.0" prefWidth="431.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.AgeDistributionDialog">
+    <stylesheets>
+        <URL value="@ageDistributionDialog.css" />
+    </stylesheets>
+    <VBox>
+        <Label fx:id="labelLessThan12" text="Age moins de 12 ans" />
+        <ProgressBar fx:id="progressBarLessThan12" prefHeight="18.0" prefWidth="213.0" styleClass="progress-bar-less-than-12" />
+    </VBox>
+    <VBox>
+        <Label fx:id="label12To18" text="Age entre 12 et 18 ans" />
+        <ProgressBar fx:id="progressBar12To18" prefHeight="18.0" prefWidth="213.0" styleClass="progress-bar-12-to-18" />
+    </VBox>
+    <VBox>
+        <Label fx:id="label19To30" text="Age entre 18 et 30 ans" />
+        <ProgressBar fx:id="progressBar19To30" prefHeight="18.0" prefWidth="213.0" styleClass="progress-bar-19-to-30"/>
+    </VBox>
+    <VBox>
+        <Label fx:id="labelGreaterThan30" text="Age plus de 30ans" />
+        <ProgressBar fx:id="progressBarGreaterThan30" prefHeight="18.0" prefWidth="213.0" styleClass= "progress-bar-greater-than-30" />
+    </VBox>
+</VBox>

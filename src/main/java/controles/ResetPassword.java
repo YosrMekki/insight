@@ -60,6 +60,10 @@ public class ResetPassword {
         if (student != null) {
             // Assuming you have a method to update only the password in your StudentService
             String newPassword = newPasswordField.getText();
+            if (!isValidPassword(newPassword)) {
+                displayErrorMessage("Invalid password");
+                return;
+            }
             student.setPassword(newPassword);
             // Update only the password for the student
             try {
@@ -87,6 +91,10 @@ public class ResetPassword {
             e.printStackTrace();
             // Handle IOException
         }
+    }
+    private boolean isValidPassword(String password) {
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+        return password.matches(passwordRegex);
     }
 
 }

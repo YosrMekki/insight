@@ -4,10 +4,11 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.*;
 
 import entities.Professor;
 import entities.Student;
@@ -113,6 +114,9 @@ public class Dashboard {
     private TextField searchField ;
     @FXML
     private Button searchid ;
+    @FXML
+    private Button ageDistribution;
+
 
 
     private final StudentService studentService = new StudentService();
@@ -127,6 +131,8 @@ public class Dashboard {
     void initialize() {
         try {
             // Initialize cell value factories for students
+
+
             idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
             firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
             lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -170,16 +176,16 @@ public class Dashboard {
         System.out.println(firstName+ lastName);
     }
 
-
-
-
     private void displayStudents() throws SQLException {
+
+
         ObservableList<Student> students = FXCollections.observableArrayList(studentService.Display());
         studentTable.setItems(students);
     }
     private void displayProfessors() throws SQLException {
         ObservableList<Professor> professors = FXCollections.observableArrayList(professorService.Display());
         professorTable.setItems(professors);
+
     }
 
     private void initializeActionsColumn() {
@@ -414,12 +420,14 @@ public class Dashboard {
 
     @FXML
     public void showDataTable() {
+        ageDistribution.setVisible(true);
         professorTable.setVisible(false);
         studentTable.setVisible(true);
         searchField.setVisible(true);
         searchid.setVisible(true);
     }
     public void showProfessorDataTable(ActionEvent actionEvent) {
+        ageDistribution.setVisible(false);
         studentTable.setVisible(false);
         professorTable.setVisible(true);}
 
@@ -527,5 +535,88 @@ public class Dashboard {
             // Handle the exception
         }
     }
+
+    //statistique
+
+    public void showAgeDistributionDialog(ActionEvent event) {
+        try {
+            // Load the FXML file
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ageDistributionDialog.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Get the controller and initialize data
+            AgeDistributionDialog dialogController = fxmlLoader.getController();
+            dialogController.initData(calculateAgePercentages(studentService.Display()));
+
+            // Create and configure the stage
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+
+            // Show the stage
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the IOException
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle other exceptions, consider displaying an error message to the user
+        }
+    }
+
+    private int calculateAge(Date birthDate) {
+        // Convert java.sql.Date to Instant
+        Instant instant = Instant.ofEpochMilli(birthDate.getTime());
+
+        // Convert Instant to LocalDate
+        LocalDate birthLocalDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // Get current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Calculate age using Period.between()
+        return Period.between(birthLocalDate, currentDate).getYears();
+    }
+
+    private Map<String, Double> calculateAgePercentages(List<Student> students) {
+        // Initialize counters for different age groups
+        int countLessThan12 = 0;
+        int count12To18 = 0;
+        int count19To30 = 0;
+        int countGreaterThan30 = 0;
+
+        // Calculate age group for each student
+        for (Student student : students) {
+            int age = calculateAge(student.getBirthDate());
+            if (age < 12) {
+                countLessThan12++;
+            } else if (age <= 18) {
+                count12To18++;
+            } else if (age <= 30) {
+                count19To30++;
+            } else {
+                countGreaterThan30++;
+            }
+        }
+
+        // Calculate total number of students
+        int totalStudents = students.size();
+
+        // Calculate percentages for each age group
+        double percentageLessThan12 = (double) countLessThan12 / totalStudents * 100;
+        double percentage12To18 = (double) count12To18 / totalStudents * 100;
+        double percentage19To30 = (double) count19To30 / totalStudents * 100;
+        double percentageGreaterThan30 = (double) countGreaterThan30 / totalStudents * 100;
+
+        // Create a map to store the percentages
+        Map<String, Double> agePercentages = new HashMap<>();
+        agePercentages.put("LessThan12", percentageLessThan12);
+        agePercentages.put("12To18", percentage12To18);
+        agePercentages.put("19To30", percentage19To30);
+        agePercentages.put("GreaterThan30", percentageGreaterThan30);
+
+        return agePercentages;
+    }
+
 }
 

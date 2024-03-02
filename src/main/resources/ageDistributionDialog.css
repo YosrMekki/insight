@@ -1,0 +1,15 @@
+.progress-bar-less-than-12 .bar {
+    -fx-accent: blue;
+}
+
+.progress-bar-12-to-18 .bar {
+    -fx-accent: pink;
+}
+
+.progress-bar-19-to-30 .bar {
+    -fx-accent: green;
+}
+
+.progress-bar-greater-than-30 .bar {
+    -fx-accent: yellow;
+}

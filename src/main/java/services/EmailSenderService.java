@@ -22,7 +22,7 @@ public class EmailSenderService {
     public void sendPasswordResetEmail(String recipientEmail, String resetCode) throws MessagingException {
         // Email message details
         String subject = "Password Reset Request";
-        String body = "Dear User,\n\nTo reset your password, please use the following code:\n\n" + resetCode + "\n\nThis code will expire in 1 hour.\n\nBest regards,\nYour App Team";
+        String body = "Dear User,\n\nTo reset your password, please use the following code:\n\n" + resetCode + "\nBest regards,\nInsight Team";
         System.out.println("Email body: " + body); // Print the email body with the reset code
 
         // Send the email

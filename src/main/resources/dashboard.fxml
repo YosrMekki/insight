@@ -16,6 +16,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ProgressBar?>
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controles.Dashboard" style="-fx-background-color: #1554b3;">
     <stylesheets>
         <URL value="@dashboard.css" />
@@ -45,11 +46,15 @@
         <Button fx:id="addAdminButton" text="Ajouter admin" layoutX="800.0" layoutY="30.0" onAction="#addAdmin" styleClass="ajoutbtnAdmin"/>
         <Button fx:id="addProfessorButton" text="Ajouter professeur" layoutX="600.0" layoutY="30.0" onAction="#addProfessor" styleClass="ajoutbtnProf"/>
         <Button fx:id="logoutButton" text="Logout" layoutX="30.0" layoutY="520.0" onAction="#logout" styleClass="logout-button"/>
+        <Button fx:id="ageDistribution" text="Show Age Distribution" onAction="#showAgeDistributionDialog" style="-fx-background-color: white; -fx-text-fill: blue;" layoutX="230.0" layoutY="80.0" visible="false"/>
+
         <!-- Data table for displaying students -->
         <HBox spacing="10" layoutX="800.0" layoutY="80.0">
             <TextField fx:id="searchField" promptText="Rechercher..." visible="false"/>
             <Button fx:id="searchid" text="Rechercher" onAction="#handleSearch" visible="false"/>
         </HBox>
+
+        <!-- Age Distribution Dialog -->
 
         <TableView fx:id="studentTable" layoutX="220.0" layoutY="120.0" prefHeight="450" prefWidth="750.0"   visible="false">
 
@@ -142,6 +147,8 @@
                 </TableColumn>
             </columns>
         </TableView>
+
+
     </children>
 </AnchorPane>
 

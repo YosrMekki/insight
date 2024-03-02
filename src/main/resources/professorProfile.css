@@ -20,3 +20,17 @@
     -fx-spacing: 20px; /* Adjust spacing between labels */
 }
 
+/* Logout button style */
+.logout-button {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #B71C1C;
+}
+
+.logout-button:hover {
+    -fx-background-color: #FF5252;
+}

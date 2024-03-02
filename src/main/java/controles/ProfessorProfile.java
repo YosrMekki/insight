@@ -2,8 +2,10 @@ package controles;
 
 import entities.Professor;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -174,5 +176,19 @@ public class ProfessorProfile {
     }
 
 
+    public void logout(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/signin.fxml"));
+            Scene scene = new Scene(root);
 
+            // Get the stage information
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set the new scene in the stage
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
