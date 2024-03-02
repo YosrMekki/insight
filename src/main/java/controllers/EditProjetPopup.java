@@ -44,7 +44,7 @@ public class EditProjetPopup extends Dialog<Pair<Projet, String>>{
         grid.add(new Label("Description:"), 0, 1);
         grid.add(lastNameField, 1, 1);
         grid.add(new Label("Nom de l'entreprise:"), 0, 3);
-        grid.add(adresseField, 1, 3);
+
 
 
         // Set the dialog content
@@ -59,19 +59,14 @@ public class EditProjetPopup extends Dialog<Pair<Projet, String>>{
                 String nomEntreprise = adresseField.getText();
 
 
-                // Validate email
-
-
-
-                // Validate password (not applicable in this context)
 
 
 
 
 
-                // Validate CIN (not implemented yet)
 
-                // Create updated student object
+
+                // Create updated project object
                 Projet updatedProfessor = new Projet(
                         nomProjet,
                         description,
@@ -86,48 +81,7 @@ public class EditProjetPopup extends Dialog<Pair<Projet, String>>{
     }
 
 
-    private boolean isValidEmail(String email) {
-        // Regular expression for basic email validation
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        return email.matches(emailRegex);
-    }
 
-    // Method to check if email is unique
-
-
-    private boolean isValidPassword(String password) {
-        // Password must be at least 8 characters long and contain at least one digit, one uppercase letter, and one lowercase letter
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
-        return password.matches(passwordRegex);
-    }
-
-    // Method to validate birth date
-    private boolean isValidBirthDate(Date birthDate) {
-        // Define acceptable range of birth dates (e.g., from 1900 to current year)
-        LocalDate minDate = LocalDate.of(1900, 1, 1);
-        LocalDate maxDate = LocalDate.now();
-
-        // Convert java.sql.Date to LocalDate
-        LocalDate date = birthDate.toLocalDate();
-
-        // Check if birth date is within the acceptable range
-        return !(date.isBefore(minDate) || date.isAfter(maxDate));
-    }
-
-    //check phone number
-    private boolean isValidPhoneNumber(String phoneNumberString) {
-        // Check if the phone number string is not null and has a length of 8
-        if (phoneNumberString != null && phoneNumberString.length() == 8) {
-            // Check if the phone number string contains only numeric digits
-            for (int i = 0; i < phoneNumberString.length(); i++) {
-                if (!Character.isDigit(phoneNumberString.charAt(i))) {
-                    return false; // Return false if a non-digit character is found
-                }
-            }
-            return true; // Return true if all characters are digits and length is 8
-        }
-        return false; // Return false if length is not 8 or phone number is null
-    }
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);

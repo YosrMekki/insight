@@ -9,8 +9,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="498.0" prefWidth="821.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProjetController">
+<AnchorPane prefHeight="498.0" prefWidth="821.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProjetController">
    <children>
       <Label layoutX="181.0" layoutY="72.0" text="Nom du projet:" />
       <Label layoutX="181.0" layoutY="115.0" text="Description:" />
@@ -25,22 +27,22 @@
       </Button>
       <TableView fx:id="projetTable" layoutX="165.0" layoutY="298.0" prefHeight="200.0" prefWidth="622.0">
           <columns>
-              <TableColumn fx:id="idProjetTV" prefWidth="75.0" text="IDProjet" >
+              <TableColumn fx:id="idProjetTV" prefWidth="75.0" text="IDProjet">
                   <cellValueFactory>
                       <PropertyValueFactory property="idProjet" />
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn fx:id="nomProjetTV" prefWidth="112.0" text="Nom de projet" >
+              <TableColumn fx:id="nomProjetTV" prefWidth="112.0" text="Nom de projet">
                   <cellValueFactory>
                       <PropertyValueFactory property="nomProjet" />
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn fx:id="descriptionTV" prefWidth="145.60003662109375" text="Description" >
+              <TableColumn fx:id="descriptionTV" prefWidth="145.60003662109375" text="Description">
                   <cellValueFactory>
                       <PropertyValueFactory property="description" />
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn fx:id="nomEntrepriseTV" prefWidth="124.79998779296875" text="Nom de l'entreprise" >
+              <TableColumn fx:id="nomEntrepriseTV" prefWidth="124.79998779296875" text="Nom de l'entreprise">
                   <cellValueFactory>
                       <PropertyValueFactory property="nomEntreprise" />
                   </cellValueFactory>
@@ -48,5 +50,15 @@
             <TableColumn fx:id="projetActionComumn" prefWidth="163.19998779296873" text="Actions" />
         </columns>
       </TableView>
+      <AnchorPane prefHeight="498.0" prefWidth="161.0" style="-fx-background-color: #A3CEE5;">
+         <children>
+            <Label alignment="TOP_CENTER" layoutX="17.0" layoutY="37.0" prefHeight="84.0" prefWidth="128.0" text="INSIGHT" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="29.0" />
+               </font>
+            </Label>
+            <Line endX="21.199981689453125" endY="1.52587890625E-5" layoutX="101.0" layoutY="79.0" startX="-100.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

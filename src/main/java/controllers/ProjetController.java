@@ -171,8 +171,8 @@ public class ProjetController implements Initializable {
 
     private void initializeActionsColumn() {
         projetActionComumn.setCellFactory(param -> new TableCell<>() {
-            private final Button editButton = new Button("Edit");
-            private final Button deleteButton = new Button("Delete");
+            private final Button editButton = new Button("MODIFIER");
+            private final Button deleteButton = new Button("SUPPRIMER");
             private final HBox container = new HBox(editButton, deleteButton);
 
             {
@@ -205,8 +205,8 @@ public class ProjetController implements Initializable {
             // Create a confirmation dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
-            alert.setHeaderText("Delete Student");
-            alert.setContentText("Are you sure you want to delete " + selectedProjet.getNomProjet() + " " + selectedProjet.getNomEntreprise() + "?");
+            alert.setHeaderText("Supprimer Projet");
+            alert.setContentText("Êtes-vous sûr de vouloir supprimer ? " + selectedProjet.getNomProjet() + " " + selectedProjet.getNomEntreprise() + "?");
 
             // Add OK and Cancel buttons to the dialog
             ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
@@ -237,6 +237,7 @@ public class ProjetController implements Initializable {
 
     private void handleEditButton() {
         Projet selectedProjet = projetTable.getSelectionModel().getSelectedItem();
+
 
         if (selectedProjet != null) {
             // Create an instance of the EditStudentPopup dialog
@@ -269,6 +270,10 @@ public class ProjetController implements Initializable {
         } else {
             // No student selected, display an error message or handle accordingly
             System.out.println("No student selected for editing.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Veuillez sélectionner un projet à modifier ou supprimer.");
+            alert.show();
+            return;
         }
     }
 
@@ -281,5 +286,8 @@ public class ProjetController implements Initializable {
         projetTable.setItems(projets);
 
     }
-    }
+
+
+
+}
 
