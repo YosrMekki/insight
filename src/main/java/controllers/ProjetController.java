@@ -3,27 +3,34 @@ package controllers;
 import entities.Projet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.util.Pair;
 import services.ProjetService;
-
+import javax.mail.Authenticator;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+import javafx.scene.control.Alert;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+import javafx.collections.transformation.SortedList;
 
 public class ProjetController implements Initializable {
-    public TableView<Projet> projetTable;
-    public TableColumn<Projet, Void> projetActionComumn;
-    ProjetService projetService= new ProjetService();
+
     @FXML
-    private TableView<Projet> tableView;
+    private TableView<Projet> projetTable;
 
     @FXML
     private TableColumn<Projet, Integer> idProjetTV;
@@ -38,6 +45,12 @@ public class ProjetController implements Initializable {
     private TableColumn<Projet, String> nomEntrepriseTV;
 
     @FXML
+    private TableColumn<Projet, String> domaineTV;
+
+    @FXML
+    private TableColumn<Projet, String> mailProfesseurTV;
+
+    @FXML
     private TextArea descriptionProjet;
 
     @FXML
@@ -46,144 +59,119 @@ public class ProjetController implements Initializable {
     @FXML
     private TextField nomProjet;
 
+    @FXML
+    private ComboBox<String> comboboxDomaine;
 
+    @FXML
+    private TextField mailProfesseur;
+
+    @FXML
+    private TextField keyWordsTF; // Ajout du TextField pour la recherche
+    @FXML
+    private BarChart<String, Number> projetChart;
+    @FXML
+    private CategoryAxis xAxis; // L'axe des catégories (Domaines)
+    @FXML
+    private NumberAxis yAxis; // L'axe des nombres (Nombre de projets)
+    private final ProjetService projetService = new ProjetService();
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        idProjetTV.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
+        nomProjetTV.setCellValueFactory(new PropertyValueFactory<>("nomProjet"));
+        descriptionTV.setCellValueFactory(new PropertyValueFactory<>("description"));
+        nomEntrepriseTV.setCellValueFactory(new PropertyValueFactory<>("nomEntreprise"));
+        comboboxDomaine.setItems(FXCollections.observableArrayList("Développement web", "Cyber securité", "Intelligence artificielle"));
+        domaineTV.setCellValueFactory(new PropertyValueFactory<>("domaine"));
+        mailProfesseurTV.setCellValueFactory(new PropertyValueFactory<>("email"));
+
+        // Initialise la colonne des actions
+        initializeActionsColumn();
+
+        try {
+            displayProjets();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Gérer l'exception
+        }
+
+        projetTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                displayProjetDetails(newValue);
+            }
+        }
+
+        );
+
+        // Ajout de l'écouteur pour la recherche
+        keyWordsTF.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                filterProjects(newValue);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Gérer l'exception
+            }
+
+        });
+        try {
+            displayProjets();
+            updateProjetChart(); // Mettez à jour le graphique après avoir affiché les projets
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Gérer l'exception
+        }
+    }
 
     @FXML
     void ajouterProjet(ActionEvent event) {
-        if (nomProjet.getText().isEmpty() || descriptionProjet.getText().isEmpty() || nomEntreprise.getText().isEmpty()) {
+        if (nomProjet.getText().isEmpty() || descriptionProjet.getText().isEmpty() || nomEntreprise.getText().isEmpty() || comboboxDomaine.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Veuillez remplir tous les champs du formulaire.");
             alert.show();
             return;
         }
 
-        Projet projet = new Projet(nomProjet.getText(), descriptionProjet.getText(), nomEntreprise.getText());
-        ProjetService projetService = new ProjetService();
+        Projet projet = new Projet(
+                nomProjet.getText(),
+                descriptionProjet.getText(),
+                nomEntreprise.getText(),
+                comboboxDomaine.getValue(), // Utiliser la valeur sélectionnée dans le ComboBox
+                mailProfesseur.getText()
+        );
 
-        // Récupérer les projets existants
-        List<Projet> projets = null;
         try {
-            projets = projetService.recuperer();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Vérifier l'unicité du projet
-        boolean projetExiste = false;
-        for (Projet projetExistant : projets) {
-            if (projetExistant.getNomProjet().equals(projet.getNomProjet()) &&
-                    projetExistant.getDescription().equals(projet.getDescription()) &&
-                    projetExistant.getNomEntreprise().equals(projet.getNomEntreprise())) {
-                projetExiste = true;
-                break;
-            }
-        }
-
-        if (projetExiste) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("Un projet avec les mêmes informations existe déjà.");
+            projetService.ajouter(projet);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Le projet a été ajouté avec succès");
             alert.show();
-        } else {
-            // Ajouter le projet à la base de données
-            try {
-                projetService.ajouter(projet);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Le projet a été ajouté avec succès");
-                alert.show();
 
-                // Rafraîchir le TableView après l'ajout
-                displayProjets();
-            } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText(e.getMessage());
-                alert.show();
-            }
-        }
-    }
-
-
-    @FXML
-    void modifier(ActionEvent event) {
-        Projet projet = tableView.getSelectionModel().getSelectedItem();  // Récupérer l'élément sélectionné
-        if (projet != null) {
-            projet.setNomProjet(nomProjet.getText());
-            projet.setDescription(descriptionProjet.getText());
-            projet.setNomEntreprise(nomEntreprise.getText());
-
-            ProjetService projetService = new ProjetService();
-            try {
-                projetService.modifier(projet);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Le projet a été modifié avec succès");
-                alert.show();
-            } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText(e.getMessage());
-                alert.show();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("Veuillez sélectionner un projet à modifier.");
-            alert.show();
-        }
-    }
-
-    @FXML
-    void supprimer(ActionEvent event) {
-        Projet projet = tableView.getSelectionModel().getSelectedItem();  // Récupérer l'élément sélectionné
-        if (projet != null) {
-            ProjetService projetService = new ProjetService();
-            try {
-                projetService.supprimer(projet.getIdProjet());  // Utiliser l'ID du projet
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Le projet a été supprimé avec succès");
-                alert.show();
-
-                // Rafraîchir le TableView après la suppression
-                displayProjets();
-            } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText(e.getMessage());
-                alert.show();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("Veuillez sélectionner un projet à supprimer.");
-            alert.show();
-        }
-    }
-
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        idProjetTV.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
-        nomProjetTV.setCellValueFactory(new PropertyValueFactory<>("nomProjet"));
-        descriptionTV.setCellValueFactory(new PropertyValueFactory<>("description"));
-        nomEntrepriseTV.setCellValueFactory(new PropertyValueFactory<>("nomEntreprise"));
-
-        initializeActionsColumn();
-        try {
+            updateProjetChart();
             displayProjets();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(e.getMessage());
+            alert.show();
         }
     }
 
     private void initializeActionsColumn() {
-        projetActionComumn.setCellFactory(param -> new TableCell<>() {
-            private final Button editButton = new Button("MODIFIER");
-            private final Button deleteButton = new Button("SUPPRIMER");
+        TableColumn<Projet, Void> actionsColumn = new TableColumn<>("Actions");
+        actionsColumn.setPrefWidth(100);
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("Modifier");
+            private final Button deleteButton = new Button("Supprimer");
             private final HBox container = new HBox(editButton, deleteButton);
 
             {
                 editButton.setOnAction(event -> {
-                    // Handle edit action
-                    handleEditButton();
+                    Projet projet = getTableView().getItems().get(getIndex());
+                    openEditProjetPopup(projet);
                 });
 
                 deleteButton.setOnAction(event -> {
-                    // Handle delete action
-                    handleDeleteButton();
+                    Projet projet = getTableView().getItems().get(getIndex());
+                    supprimerProjet(projet);
                 });
             }
 
@@ -197,97 +185,178 @@ public class ProjetController implements Initializable {
                 }
             }
         });
+        projetTable.getColumns().add(actionsColumn);
     }
-    private void handleDeleteButton() {
-        Projet selectedProjet = projetTable.getSelectionModel().getSelectedItem();
 
-        if (selectedProjet != null) {
-            // Create a confirmation dialog
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirm Deletion");
-            alert.setHeaderText("Supprimer Projet");
-            alert.setContentText("Êtes-vous sûr de vouloir supprimer ? " + selectedProjet.getNomProjet() + " " + selectedProjet.getNomEntreprise() + "?");
+    private void openEditProjetPopup(Projet projet) {
+        EditProjetPopup editProjetPopup = new EditProjetPopup(projet);
+        Optional<Pair<Projet, String>> result = editProjetPopup.showAndWait();
+        result.ifPresent(pair -> {
+            Projet updatedProjet = pair.getKey();
+            String nomProjet = pair.getValue();
+            try {
+                projetService.modifier(updatedProjet);
+                displayProjets();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Gérer l'exception
+            }
+        });
+    }
 
-            // Add OK and Cancel buttons to the dialog
-            ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(okButton, cancelButton);
+    @FXML
+    void supprimerProjet(Projet event) {
+        Projet projet = projetTable.getSelectionModel().getSelectedItem();
+        if (projet != null) {
+            try {
+                projetService.supprimer(projet.getIdProjet());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("Le projet a été supprimé avec succès");
+                alert.show();
 
-            // Show the confirmation dialog and wait for user response
-            Optional<ButtonType> result = alert.showAndWait();
-
-            // If the user confirms deletion, proceed with deletion
-            if (result.isPresent() && result.get() == okButton) {
-                try {
-                    // Delete the selected student from the database using the StudentService
-                    projetService.supprimer(selectedProjet.getIdProjet());
-
-                    // Remove the selected student from the TableView
-                    projetTable.getItems().remove(selectedProjet);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    // Handle the exception
-                }
+                displayProjets();
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(e.getMessage());
+                alert.show();
             }
         } else {
-            // No student selected, display an error message or handle accordingly
-            System.out.println("No student selected for deletion.");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Veuillez sélectionner un projet à supprimer.");
+            alert.show();
         }
     }
 
-    private void handleEditButton() {
-        Projet selectedProjet = projetTable.getSelectionModel().getSelectedItem();
+    private void displayProjets() throws SQLException {
+        List<Projet> projetsList = projetService.recuperer();
+        ObservableList<Projet> projets = FXCollections.observableArrayList(projetsList);
+        projetTable.setItems(projets);
+    }
 
+    private void displayProjetDetails(Projet projet) {
+        nomProjet.setText(projet.getNomProjet());
+        descriptionProjet.setText(projet.getDescription());
+        nomEntreprise.setText(projet.getNomEntreprise());
+        comboboxDomaine.setValue(projet.getDomaine());
+        mailProfesseur.setText(projet.getEmail());
+    }
 
-        if (selectedProjet != null) {
-            // Create an instance of the EditStudentPopup dialog
-            EditProjetPopup editStudentPopup = new EditProjetPopup(selectedProjet);
+    // Méthode pour filtrer les projets en fonction des mots-clés de recherche
+    private void filterProjects(String keyword) throws SQLException {
+        List<Projet> projetsList = projetService.recuperer();
+        ObservableList<Projet> projets = FXCollections.observableArrayList(projetsList);
+        FilteredList<Projet> filteredData = new FilteredList<>(projets, p -> true);
 
-            // Show the dialog and wait for the user response
-            Optional<Pair<Projet, String>> result = editStudentPopup.showAndWait();
-
-            // If the user clicked the Save button, update the student information
-            result.ifPresent(pair -> {
-                Projet updatedProjet = pair.getKey();
-                String newEmail = pair.getValue();
-
-                // Update the selected student with the new information
-                selectedProjet.setNomProjet(updatedProjet.getNomProjet());
-                selectedProjet.setDescription(updatedProjet.getDescription());
-                selectedProjet.setNomEntreprise(updatedProjet.getNomEntreprise());
-
-                try {
-                    // Update the changes in the database using the StudentService
-                    projetService.modifier(selectedProjet);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    // Handle the exception
-                }
-
-                // Refresh the TableView to reflect the changes
-                projetTable.refresh();
+        if (keyword != null && !keyword.isEmpty()) {
+            filteredData.setPredicate(projet -> {
+                String lowerCaseKeyword = keyword.toLowerCase();
+                return projet.getNomProjet().toLowerCase().contains(lowerCaseKeyword)
+                        || projet.getDescription().toLowerCase().contains(lowerCaseKeyword)
+                        || projet.getNomEntreprise().toLowerCase().contains(lowerCaseKeyword)
+                        || projet.getDomaine().toLowerCase().contains(lowerCaseKeyword)
+                        || projet.getEmail().toLowerCase().contains(lowerCaseKeyword);
             });
-        } else {
-            // No student selected, display an error message or handle accordingly
-            System.out.println("No student selected for editing.");
+        }
+
+        projetTable.setItems(filteredData);
+    }
+    private void updateProjetChart() throws SQLException {
+        ObservableList<Projet> projets = FXCollections.observableArrayList(projetService.recuperer());
+        Map<String, Integer> projetCountByDomaine = new HashMap<>();
+
+        // Comptage des projets par domaine
+        for (Projet projet : projets) {
+            String domaine = projet.getDomaine();
+            if (!projetCountByDomaine.containsKey(domaine)) {
+                projetCountByDomaine.put(domaine, 1);
+            } else {
+                projetCountByDomaine.put(domaine, projetCountByDomaine.get(domaine) + 1);
+            }
+        }
+        // Préparation des données pour le BarChart
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        ObservableList<String> domaines = comboboxDomaine.getItems();
+        for (String domaine : domaines) {
+            int count = projetCountByDomaine.getOrDefault(domaine, 0);
+            series.getData().add(new XYChart.Data<>(domaine, count));
+        }
+
+        projetChart.getData().clear();
+        projetChart.getData().add(series);
+    }
+
+
+
+    @FXML
+    void envoyerMailProfesseur(ActionEvent event) {
+        // Récupérer les informations du projet depuis les champs texte
+        String description = descriptionProjet.getText();
+        String domaine = comboboxDomaine.getValue();
+        // Récupérer l'adresse e-mail du professeur depuis le champ texte
+        String emailProfesseur = mailProfesseur.getText();
+
+        // Vérifier si l'adresse e-mail du professeur est vide
+        if (emailProfesseur.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("Veuillez sélectionner un projet à modifier ou supprimer.");
+            alert.setContentText("Veuillez saisir l'adresse e-mail du professeur.");
             alert.show();
             return;
         }
+
+        // Configurer les informations de connexion au serveur SMTP
+        String host = "smtp.gmail.com";
+        String port = "587"; // Port SMTP (TLS)
+        String username = "pinsight76@gmail.com";
+        String password = "hfee wchg dbta qazd";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+
+        // Créer une session de messagerie
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        try {
+            // Créer le message e-mail
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("pinsight76@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailProfesseur));
+            message.setSubject("Affectation projet");
+
+            // Contenu du message avec les détails du projet
+            String contenuMessage = "Bonjour Professeur,\n\n"
+                    + "Nous avons le plaisir de vous informer que vous avez été affecté pour encadrer le projet suivant :\n\n"
+                    + "Nom du projet : " + nomProjet + "\n"
+                    + "Description : " + description + "\n"
+                    + "Nom de l'entreprise : " + nomEntreprise + "\n"
+                    + "Domaine : " + domaine + "\n\n"
+                    + "Nous vous remercions pour votre implication et votre collaboration.\n\n"
+                    + "Cordialement,\n"
+                    + "Votre nom ou celui de votre équipe";
+
+            message.setText(contenuMessage);
+
+
+            // Envoyer le message
+            Transport.send(message);
+
+            // Afficher une confirmation
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("L'e-mail a été envoyé avec succès au professeur.");
+            alert.show();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Une erreur s'est produite lors de l'envoi de l'e-mail.");
+            alert.show();
+        }
     }
-
-    public void displayProjets() throws SQLException {
-        System.out.println("hello");
-        List<Projet> projetsList = projetService.recuperer();
-        ObservableList<Projet> projets = FXCollections.observableArrayList(projetsList);
-
-
-        projetTable.setItems(projets);
-
-    }
-
-
-
 }
 

@@ -5,77 +5,77 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Projet {
 
-    private SimpleIntegerProperty idProjet;
-    private SimpleStringProperty nomProjet;
-    private SimpleStringProperty description;
-    private SimpleStringProperty nomEntreprise;
+    private int idProjet;
+    private String nomProjet;
+    private String description;
+    private String nomEntreprise;
+    private String domaine;
+    private String email;
 
-    public Projet() {
-        this.idProjet = new SimpleIntegerProperty();
-        this.nomProjet = new SimpleStringProperty();
-        this.description = new SimpleStringProperty();
-        this.nomEntreprise = new SimpleStringProperty();
+    public Projet(int idProjet, String nomProjet, String description, String nomEntreprise, String domaine, String email) {
+        this.idProjet = idProjet;
+        this.nomProjet = nomProjet;
+        this.description = description;
+        this.nomEntreprise = nomEntreprise;
+        this.domaine = domaine;
+        this.email = email;
     }
 
-    public Projet(int idProjet, String nomProjet, String description, String nomEntreprise) {
-        this.idProjet = new SimpleIntegerProperty(idProjet);
-        this.nomProjet = new SimpleStringProperty(nomProjet);
-        this.description = new SimpleStringProperty(description);
-        this.nomEntreprise = new SimpleStringProperty(nomEntreprise);
+    public Projet(String nomProjet, String description, String nomEntreprise, String domaine, String email) {
+        this.nomProjet = nomProjet;
+        this.description = description;
+        this.nomEntreprise = nomEntreprise;
+        this.domaine = domaine;
+        this.email = email;
     }
 
-    public Projet(String nomProjet, String description, String nomEntreprise) {
-        this.nomProjet = new SimpleStringProperty(nomProjet);
-        this.description = new SimpleStringProperty(description);
-        this.nomEntreprise = new SimpleStringProperty(nomEntreprise);
-    }
-
+    public Projet(){}
     public int getIdProjet() {
-        return idProjet.get();
-    }
-
-    public SimpleIntegerProperty idProjetProperty() {
         return idProjet;
     }
 
     public void setIdProjet(int idProjet) {
-        this.idProjet.set(idProjet);
+        this.idProjet = idProjet;
     }
 
     public String getNomProjet() {
-        return nomProjet.get();
-    }
-
-    public SimpleStringProperty nomProjetProperty() {
         return nomProjet;
     }
 
     public void setNomProjet(String nomProjet) {
-        this.nomProjet.set(nomProjet);
+        this.nomProjet = nomProjet;
     }
 
     public String getDescription() {
-        return description.get();
-    }
-
-    public SimpleStringProperty descriptionProperty() {
         return description;
     }
 
     public void setDescription(String description) {
-        this.description.set(description);
+        this.description = description;
     }
 
     public String getNomEntreprise() {
-        return nomEntreprise.get();
-    }
-
-    public SimpleStringProperty nomEntrepriseProperty() {
         return nomEntreprise;
     }
 
     public void setNomEntreprise(String nomEntreprise) {
-        this.nomEntreprise.set(nomEntreprise);
+        this.nomEntreprise = nomEntreprise;
+    }
+
+    public String getDomaine() {
+        return domaine;
+    }
+
+    public void setDomaine(String domaine) {
+        this.domaine = domaine;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -85,6 +85,8 @@ public class Projet {
                 ", nomProjet='" + nomProjet + '\'' +
                 ", description='" + description + '\'' +
                 ", nomEntreprise='" + nomEntreprise + '\'' +
+                ", domaine='" + domaine + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
