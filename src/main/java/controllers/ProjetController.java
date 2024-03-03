@@ -125,12 +125,22 @@ public class ProjetController implements Initializable {
 
     @FXML
     void ajouterProjet(ActionEvent event) {
+        // Vérifier si tous les champs sont remplis
+
         if (nomProjet.getText().isEmpty() || descriptionProjet.getText().isEmpty() || nomEntreprise.getText().isEmpty() || comboboxDomaine.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setContentText("Veuillez remplir tous les champs du formulaire.");
             alert.show();
             return;
         }
+        // Vérifier si l'e-mail du professeur est valide
+        if (!isValidEmail(mailProfesseur.getText())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Veuillez saisir une adresse e-mail valide pour le professeur.");
+            alert.show();
+            return;
+        }
+
 
         Projet projet = new Projet(
                 nomProjet.getText(),
@@ -153,7 +163,15 @@ public class ProjetController implements Initializable {
             alert.setContentText(e.getMessage());
             alert.show();
         }
+
     }
+    // Méthode pour valider un e-mail
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
+
+
 
     private void initializeActionsColumn() {
         TableColumn<Projet, Void> actionsColumn = new TableColumn<>("Actions");
@@ -231,6 +249,12 @@ public class ProjetController implements Initializable {
         List<Projet> projetsList = projetService.recuperer();
         ObservableList<Projet> projets = FXCollections.observableArrayList(projetsList);
         projetTable.setItems(projets);
+
+        // Tri par domaine
+        projetTable.getSortOrder().clear(); // Efface les tris précédents
+        domaineTV.setSortType(TableColumn.SortType.ASCENDING); // Tri par ordre croissant
+        projetTable.getSortOrder().add(domaineTV); // Applique le tri
+        projetTable.sort();
     }
 
     private void displayProjetDetails(Projet projet) {
@@ -290,8 +314,10 @@ public class ProjetController implements Initializable {
     @FXML
     void envoyerMailProfesseur(ActionEvent event) {
         // Récupérer les informations du projet depuis les champs texte
+        String domaine = domaineTV.getText();
         String description = descriptionProjet.getText();
-        String domaine = comboboxDomaine.getValue();
+        String nomEntreprise = nomEntrepriseTV.getText();
+        String nomProjet = nomProjetTV.getText();
         // Récupérer l'adresse e-mail du professeur depuis le champ texte
         String emailProfesseur = mailProfesseur.getText();
 
@@ -333,13 +359,13 @@ public class ProjetController implements Initializable {
             // Contenu du message avec les détails du projet
             String contenuMessage = "Bonjour Professeur,\n\n"
                     + "Nous avons le plaisir de vous informer que vous avez été affecté pour encadrer le projet suivant :\n\n"
+                    + "Domaine : " + domaine + "\n"
                     + "Nom du projet : " + nomProjet + "\n"
                     + "Description : " + description + "\n"
                     + "Nom de l'entreprise : " + nomEntreprise + "\n"
-                    + "Domaine : " + domaine + "\n\n"
                     + "Nous vous remercions pour votre implication et votre collaboration.\n\n"
                     + "Cordialement,\n"
-                    + "Votre nom ou celui de votre équipe";
+                    + "Equipe de INSIGHT";
 
             message.setText(contenuMessage);
 
