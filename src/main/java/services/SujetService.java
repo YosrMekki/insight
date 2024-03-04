@@ -24,7 +24,7 @@ public class SujetService implements IService<Sujet>{
     }
 
     @Override
-    public void modifier(Sujet sujet) throws SQLException {
+    public void modifier(Sujet sujet, int id) throws SQLException {
         String req = "update sujet set domaine =?, ";
         PreparedStatement preparedStatement = connection.prepareStatement(req);
         preparedStatement.setInt(1,sujet.getIdSujet());

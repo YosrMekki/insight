@@ -33,21 +33,28 @@ public class ProjetService implements IService<Projet> {
     }
 
     @Override
-    public void modifier(Projet projet) throws SQLException {
+    public void modifier(Projet projet, int id) throws SQLException {
         String req = "UPDATE projet SET nomProjet=?, description=?, nomEntreprise=?, domaine=?, email=? WHERE idProjet=?";
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
+            // Assurez-vous de définir les paramètres dans le bon ordre comme ils apparaissent dans la requête
             preparedStatement.setString(1, projet.getNomProjet());
             preparedStatement.setString(2, projet.getDescription());
             preparedStatement.setString(3, projet.getNomEntreprise());
             preparedStatement.setString(4, projet.getDomaine());
             preparedStatement.setString(5, projet.getEmail());
-            preparedStatement.setInt(6, projet.getIdProjet());
+            // Le dernier paramètre est l'ID car c'est la condition WHERE pour trouver le bon projet à mettre à jour
+            preparedStatement.setInt(6, id);
+
+            // Execute la mise à jour
             preparedStatement.executeUpdate();
+            System.out.println(projet.getIdProjet());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw e;
         }
     }
+
 
     @Override
     public void supprimer(int id) throws SQLException {

@@ -97,10 +97,10 @@ public class ProjetController implements Initializable {
         }
 
         projetTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                displayProjetDetails(newValue);
-            }
-        }
+                    if (newValue != null) {
+                        displayProjetDetails(newValue);
+                    }
+                }
 
         );
 
@@ -183,8 +183,8 @@ public class ProjetController implements Initializable {
 
             {
                 editButton.setOnAction(event -> {
-                    Projet projet = getTableView().getItems().get(getIndex());
-                    openEditProjetPopup(projet);
+
+                    openEditProjetPopup();
                 });
 
                 deleteButton.setOnAction(event -> {
@@ -206,14 +206,17 @@ public class ProjetController implements Initializable {
         projetTable.getColumns().add(actionsColumn);
     }
 
-    private void openEditProjetPopup(Projet projet) {
+    private void openEditProjetPopup() {
+        Projet projet= projetTable.getSelectionModel().getSelectedItem();
         EditProjetPopup editProjetPopup = new EditProjetPopup(projet);
         Optional<Pair<Projet, String>> result = editProjetPopup.showAndWait();
         result.ifPresent(pair -> {
             Projet updatedProjet = pair.getKey();
             String nomProjet = pair.getValue();
+            projet.setNomProjet(updatedProjet.getNomProjet());
             try {
-                projetService.modifier(updatedProjet);
+                projetService.modifier(updatedProjet, projet.getIdProjet());
+                System.out.println(projet.getIdProjet());
                 displayProjets();
             } catch (SQLException e) {
                 e.printStackTrace();
